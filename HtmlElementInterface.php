@@ -14,7 +14,7 @@ interface HtmlElementInterface
      *
      * @return ElementInterface
      */
-    static public function create($type = null, $text = null, array $attributes = array(), array $children = array());
+    public static function create($type = null, $text = null, array $attributes = array(), array $children = array());
 
     /**
      * Load a html element.

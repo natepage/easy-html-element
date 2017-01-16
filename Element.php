@@ -61,7 +61,7 @@ class Element implements ElementInterface
      */
     public function setText($text = null)
     {
-        if(null != $text){
+        if(null !== $text){
             $this->text = $text;
         }
 

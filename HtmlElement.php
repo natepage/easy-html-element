@@ -240,7 +240,7 @@ class HtmlElement implements HtmlElementInterface
     /**
      * {@inheritdoc}
      */
-    static public function create($type = null, $text = null, array $attributes = array(), array $children = array())
+    public static function create($type = null, $text = null, array $attributes = array(), array $children = array())
     {
         $htmlElement = new HtmlElement();
 
@@ -266,28 +266,23 @@ class HtmlElement implements HtmlElementInterface
      *
      * @throws InvalidArgumentsNumberException If the arguments length is more than 3
      */
-    static public function __callStatic($type, $arguments)
+    public static function __callStatic($type, $arguments)
     {
         switch(count($arguments)){
             case 0:
                 return self::create($type);
-                break;
             case 1:
                 return self::create($type, $arguments[0]);
-                break;
             case 2:
                 return self::create($type, $arguments[0], $arguments[1]);
-                break;
             case 3:
                 return self::create($type, $arguments[0], $arguments[1], $arguments[2]);
-                break;
             default:
                 throw new InvalidArgumentsNumberException(sprintf(
                     'Maximum numbers of arguments is %d, [%d] given.',
                     3,
                     count($arguments)
                 ));
-                break;
         }
     }
 
@@ -393,6 +388,7 @@ class HtmlElement implements HtmlElementInterface
     private function resolveElement($name, array $parameters, $mainCall = false)
     {
         $getCurrent = true;
+        $current = array();
 
         if(is_array($name)){
             $current = $name;
