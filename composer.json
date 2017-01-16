@@ -8,18 +8,24 @@
     "authors": [
         {
             "name": "Nathan Page",
-            "email": "nathan.page86@gmail.com"
+            "email": "nathan.page86@gmail.com",
+            "homepage": "https://github.com/natepage",
+            "role": "Developer"
         }
     ],
     "require": {
         "php": ">=5.6",
-        "airmanbzh/php-html-generator": "dev-master"
+        "airmanbzh/php-html-generator": "dev-master",
+        "zendframework/zend-escaper": "^2.5"
     },
     "autoload": {
         "psr-4": { "NatePage\\EasyHtmlElement\\": "" },
         "exclude-from-classmap": [
             "/Tests/"
         ]
+    },
+    "suggest": {
+        "symfony/yaml": "Allows you to define the elements map in YAML to make it easier !"
     },
     "support": {
         "issues": "https://github.com/natepage/easy-html-element/issues"

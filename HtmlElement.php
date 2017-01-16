@@ -11,8 +11,13 @@ class HtmlElement implements HtmlElementInterface
     /** @var array  */
     private $map;
 
+    /** @var EscaperInterface */
+    private $escaper;
+
+    /** @var array The already resolved elements */
     private $resolved = array();
 
+    /** @var array The default values of element options */
     private $defaults = array(
         'parent' => null,
         'children' => array(),
@@ -23,20 +28,41 @@ class HtmlElement implements HtmlElementInterface
         'class' => Element::class
     );
 
-    private $checks = array(
-        'parent',
-        'extends',
-        'children'
-    );
+    /** @var array The options to check to valid a branch */
+    private $checks = array('parent', 'extends', 'children');
 
-    private $mergeableAttributes = array(
-        'class',
-        'style'
-    );
+    /** @var array The mergeable attributes */
+    private $mergeableAttributes = array('class', 'style');
 
-    public function __construct(array $map = array())
+    /** @var array The special escaping types */
+    private $specialEscapingTypes = array('script', 'style');
+
+    /** @var bool Determine if html is escaped or not */
+    private $escapeHtml = true;
+
+    /** @var bool Determine if html attributes are escaped or not */
+    private $escapeHtmlAttr = true;
+
+    /** @var bool Determine if javascript is escaped or not */
+    private $escapeJs = true;
+
+    /** @var bool Determine if css is escaped or not */
+    private $escapeCss = true;
+
+    /** @var bool Determine if urls are escaped or not */
+    private $escapeUrl = true;
+
+    /**
+     * HtmlElement constructor.
+     *
+     * @param array $map                     The elements map
+     * @param EscaperInterface|null $escaper The escaper, by default ZendFramework/Escaper is used
+     * @param string $encoding               The encoding used for escaping, by default utf-8 is used
+     */
+    public function __construct(array $map = array(), EscaperInterface $escaper = null, $encoding = 'utf-8')
     {
         $this->map = $map;
+        $this->escaper = null !== $escaper ? $escaper : new Escaper($encoding);
     }
 
     /**
@@ -82,6 +108,96 @@ class HtmlElement implements HtmlElementInterface
     /**
      * {@inheritdoc}
      */
+    public function setEscapeHtml($escapeHtml = true)
+    {
+        $this->escapeHtml = $escapeHtml;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isEscapeHtml()
+    {
+        return $this->escapeHtml;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEscapeHtmlAttr($escapeHtmlAttr = true)
+    {
+        $this->escapeHtmlAttr = $escapeHtmlAttr;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isEscapeHtmlAttr()
+    {
+        return $this->escapeHtmlAttr;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEscapeJs($escapeJs = true)
+    {
+        $this->escapeJs = $escapeJs;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isEscapeJs()
+    {
+        return $this->escapeJs;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEscapeCss($escapeCss = true)
+    {
+        $this->escapeCss = $escapeCss;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isEscapeCss()
+    {
+        return $this->escapeCss;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEscapeUrl($escapeUrl = true)
+    {
+        $this->escapeUrl = $escapeUrl;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isEscapeUrl()
+    {
+        return $this->escapeUrl;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function exists($name)
     {
         return array_key_exists(lcfirst($name), $this->map);
@@ -94,10 +210,11 @@ class HtmlElement implements HtmlElementInterface
     {
         $element = $this->getInstance($name, $parameters, true);
 
-        $element
-            ->addAttributes($attributes)
-            ->addChildren($children)
-        ;
+        $element->addAttributes($this->escapeAttributes($attributes));
+
+        foreach($children as $child){
+            $element->addChild($this->escape($child));
+        }
 
         return $element;
     }
@@ -107,7 +224,13 @@ class HtmlElement implements HtmlElementInterface
      */
     static public function create($type = null, $text = null, array $attributes = array(), array $children = array())
     {
-        return new Element($type, $text, $attributes, $children);
+        $attributes = self::escapeAttributes($attributes);
+
+        foreach($children as $key => $child){
+            $children[$key] = self::escape($child);
+        }
+
+        return self::escape(new Element($type, $text, $attributes, $children));
     }
 
     /**
@@ -146,6 +269,60 @@ class HtmlElement implements HtmlElementInterface
                 ));
                 break;
         }
+    }
+
+    /**
+     * Apply escaping strategies on an element.
+     *
+     * @param ElementInterface $element The element to escape
+     *
+     * @return ElementInterface
+     */
+    private function escape(ElementInterface $element)
+    {
+        if($this->escapeHtml && !in_array($element->getType(), $this->specialEscapingTypes)){
+            $element->setText($this->escaper->escapeHtml($element->getText()));
+        }
+
+        $element->setAttributes($this->escapeAttributes($element->getAttributes()));
+
+        if($this->escapeJs && 'script' == $element->getType()){
+            $element->setText($this->escaper->escapeJs($element->getText()));
+        }
+
+        if($this->escapeCss && 'style' == $element->getType()){
+            $element->setText($this->escaper->escapeCss($element->getText()));
+        }
+
+        return $element;
+    }
+
+    /**
+     * Apply escaping strategies on element attributes.
+     *
+     * @param array $attributes The attributes array to escape
+     *
+     * @return array
+     */
+    private function escapeAttributes(array $attributes)
+    {
+        if($this->escapeHtmlAttr || $this->escapeUrl){
+            foreach($attributes as $attr => $value){
+                if('href' == $attr){
+                    if($this->escapeUrl){
+                        $value = $this->escaper->escapeUrl($value);
+                    }
+                } else {
+                    if($this->escapeHtmlAttr){
+                        $value = $this->escaper->escapeHtmlAttr($value);
+                    }
+                }
+
+                $attributes[$attr] = $value;
+            }
+        }
+
+        return $attributes;
     }
 
     /**
@@ -189,7 +366,7 @@ class HtmlElement implements HtmlElementInterface
             $parent->addChild($instance);
         }
 
-        return $instance;
+        return $this->escape($instance);
     }
 
     /**

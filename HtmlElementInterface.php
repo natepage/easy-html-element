@@ -71,4 +71,84 @@ interface HtmlElementInterface
      * @return HtmlElementInterface
      */
     public function addManyToMap(array $elements);
+
+    /**
+     * Determine if html is escaped or not
+     *
+     * @param bool $escapeHtml
+     *
+     * @return HtmlElementInterface
+     */
+    public function setEscapeHtml($escapeHtml = true);
+
+    /**
+     * Get the html escaping strategy.
+     *
+     * @return bool
+     */
+    public function isEscapeHtml();
+
+    /**
+     * Determine if html attributes are escaped or not
+     *
+     * @param bool $escapeHtmlAttr
+     *
+     * @return HtmlElementInterface
+     */
+    public function setEscapeHtmlAttr($escapeHtmlAttr = true);
+
+    /**
+     * Get the html attributes escaping strategy.
+     *
+     * @return bool
+     */
+    public function isEscapeHtmlAttr();
+
+    /**
+     * Determine if javascript is escaped or not
+     *
+     * @param bool $escapeJs
+     *
+     * @return HtmlElementInterface
+     */
+    public function setEscapeJs($escapeJs = true);
+
+    /**
+     * Get the javascript escaping strategy.
+     *
+     * @return bool
+     */
+    public function isEscapeJs();
+
+    /**
+     * Determine if css is escaped or not
+     *
+     * @param bool $escapeCss
+     *
+     * @return HtmlElementInterface
+     */
+    public function setEscapeCss($escapeCss = true);
+
+    /**
+     * Get the css escaping strategy.
+     *
+     * @return bool
+     */
+    public function isEscapeCss();
+
+    /**
+     * Determine if urls are escaped or not
+     *
+     * @param bool $escapeUrl
+     *
+     * @return HtmlElementInterface
+     */
+    public function setEscapeUrl($escapeUrl = true);
+
+    /**
+     * Get the urls escaping strategy.
+     *
+     * @return bool
+     */
+    public function isEscapeUrl();
 }
