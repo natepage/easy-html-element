@@ -1,6 +1,6 @@
 <?php
 
-namespace NatePage\HtmlElement\Exception;
+namespace NatePage\EasyHtmlElement\Exception;
 
 class UndefinedElementException extends \InvalidArgumentException implements ExceptionInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace NatePage\HtmlElement;
+namespace NatePage\EasyHtmlElement;
 
 interface HtmlElementInterface
 {

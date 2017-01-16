@@ -1,10 +1,10 @@
 <?php
 
-namespace NatePage\HtmlElement\Tests;
+namespace NatePage\EasyHtmlElement\Tests;
 
-use NatePage\HtmlElement\ElementInterface;
-use NatePage\HtmlElement\HtmlElement;
-use NatePage\HtmlElement\HtmlElementInterface;
+use NatePage\EasyHtmlElement\ElementInterface;
+use NatePage\EasyHtmlElement\HtmlElement;
+use NatePage\EasyHtmlElement\HtmlElementInterface;
 
 class HtmlElementTest extends \PHPUnit_Framework_TestCase
 {

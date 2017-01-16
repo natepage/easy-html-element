@@ -1,10 +1,10 @@
 <?php
 
-namespace NatePage\HtmlElement;
+namespace NatePage\EasyHtmlElement;
 
-use NatePage\HtmlElement\Exception\InvalidElementException;
-use NatePage\HtmlElement\Exception\InvalidArgumentsNumberException;
-use NatePage\HtmlElement\Exception\UndefinedElementException;
+use NatePage\EasyHtmlElement\Exception\InvalidElementException;
+use NatePage\EasyHtmlElement\Exception\InvalidArgumentsNumberException;
+use NatePage\EasyHtmlElement\Exception\UndefinedElementException;
 
 class HtmlElement implements HtmlElementInterface
 {

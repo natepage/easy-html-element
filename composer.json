@@ -1,10 +1,10 @@
 {
-    "name": "natepage/html-element",
+    "name": "natepage/easy-html-element",
     "type": "library",
     "description": "An easy way to create simple or complex html elements in PHP.",
     "keywords": [],
     "license": "MIT",
-    "homepage": "https://github.com/natepage/html-element",
+    "homepage": "https://github.com/natepage/easy-html-element",
     "authors": [
         {
             "name": "Nathan Page",
@@ -16,12 +16,12 @@
         "airmanbzh/php-html-generator": "dev-master"
     },
     "autoload": {
-        "psr-4": { "NatePage\\HtmlElement\\": "" },
+        "psr-4": { "NatePage\\EasyHtmlElement\\": "" },
         "exclude-from-classmap": [
             "/Tests/"
         ]
     },
     "support": {
-        "issues": "https://github.com/natepage/html-element/issues"
+        "issues": "https://github.com/natepage/easy-html-element/issues"
     }
 }

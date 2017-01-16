@@ -6,7 +6,7 @@
          colors="true"
 >
     <testsuites>
-        <testsuite name="Html Element Library Test Suite">
+        <testsuite name="Easy Html Element Library Test Suite">
             <directory>./Tests/</directory>
         </testsuite>
     </testsuites>

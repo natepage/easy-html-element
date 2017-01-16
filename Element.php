@@ -1,6 +1,6 @@
 <?php
 
-namespace NatePage\HtmlElement;
+namespace NatePage\EasyHtmlElement;
 
 use HtmlGenerator\HtmlTag;
 use HtmlGenerator\Markup;
