@@ -108,6 +108,24 @@ class HtmlElement implements HtmlElementInterface
     /**
      * {@inheritdoc}
      */
+    public function setEscaper(EscaperInterface $escaper)
+    {
+        $this->escaper = $escaper;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEscaper()
+    {
+        return $this->escaper;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setEscapeHtml($escapeHtml = true)
     {
         $this->escapeHtml = $escapeHtml;
@@ -224,13 +242,15 @@ class HtmlElement implements HtmlElementInterface
      */
     static public function create($type = null, $text = null, array $attributes = array(), array $children = array())
     {
-        $attributes = self::escapeAttributes($attributes);
+        $htmlElement = new HtmlElement();
+
+        $attributes = $htmlElement->escapeAttributes($attributes);
 
         foreach($children as $key => $child){
-            $children[$key] = self::escape($child);
+            $children[$key] = $htmlElement->escape($child);
         }
 
-        return self::escape(new Element($type, $text, $attributes, $children));
+        return $htmlElement->escape(new Element($type, $text, $attributes, $children));
     }
 
     /**
@@ -272,13 +292,9 @@ class HtmlElement implements HtmlElementInterface
     }
 
     /**
-     * Apply escaping strategies on an element.
-     *
-     * @param ElementInterface $element The element to escape
-     *
-     * @return ElementInterface
+     * {@inheritdoc}
      */
-    private function escape(ElementInterface $element)
+    public function escape(ElementInterface $element)
     {
         if($this->escapeHtml && !in_array($element->getType(), $this->specialEscapingTypes)){
             $element->setText($this->escaper->escapeHtml($element->getText()));
@@ -298,13 +314,9 @@ class HtmlElement implements HtmlElementInterface
     }
 
     /**
-     * Apply escaping strategies on element attributes.
-     *
-     * @param array $attributes The attributes array to escape
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    private function escapeAttributes(array $attributes)
+    public function escapeAttributes(array $attributes)
     {
         if($this->escapeHtmlAttr || $this->escapeUrl){
             foreach($attributes as $attr => $value){

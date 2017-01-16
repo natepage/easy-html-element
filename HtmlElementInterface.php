@@ -73,6 +73,40 @@ interface HtmlElementInterface
     public function addManyToMap(array $elements);
 
     /**
+     * Set the HtmlElement escaper.
+     *
+     * @param EscaperInterface $escaper The escaper to set
+     *
+     * @return HtmlElementInterface
+     */
+    public function setEscaper(EscaperInterface $escaper);
+
+    /**
+     * Get the HtmlElement escaper.
+     *
+     * @return EscaperInterface
+     */
+    public function getEscaper();
+
+    /**
+     * Apply escaping strategies to an element.
+     *
+     * @param ElementInterface $element The element to escape
+     *
+     * @return ElementInterface
+     */
+    public function escape(ElementInterface $element);
+
+    /**
+     * Apply escaping strategies on element attributes.
+     *
+     * @param array $attributes The attributes array to escape
+     *
+     * @return array
+     */
+    public function escapeAttributes(array $attributes);
+
+    /**
      * Determine if html is escaped or not
      *
      * @param bool $escapeHtml
