@@ -436,50 +436,89 @@ class HtmlElement implements HtmlElementInterface
      *
      * @param string $name     The current element name
      * @param array  $circular The array of elements names called in the current branch of map
-     *
-     * @throws InvalidElementException   If the current element define a parent, child or extends which creates circular
-     *                                   declaration
-     * @throws UndefinedElementException If the current element define a parent, child or extends which doesn't exist
      */
     private function validBranch($name, array $circular = array())
     {
         $current = $this->getCurrentElement($name);
 
-        $name = $current['name'];
-        $circular[] = $name;
+        $circular[] = $current['name'];
 
-        if (isset($current['class']) && !class_exists($current['class'])) {
-            throw new InvalidElementException(sprintf('The element "%s" define a class which doesn\'t exist.', $name));
-        }
+        $this->validClass($current);
 
         foreach ($this->checks as $check) {
             if (isset($current[$check])) {
                 $currentCheck = (array) $current[$check];
 
-                if (in_array($name, $currentCheck)) {
-                    throw new InvalidElementException(sprintf(
-                        'Element "%s" cannot define himself as %s.',
-                        $name,
-                        $check
-                    ));
-                }
+                $this->validDefineHimself($current['name'], $currentCheck, $check);
 
                 foreach ($currentCheck as $cc) {
-                    if (!is_array($cc) && in_array($cc, $circular)) {
-                        $circular[] = $cc;
-
-                        throw new InvalidElementException(sprintf(
-                            'Element "%s" cannot define "%s" as %s. It\'s a circular reference. [%s]',
-                            $name,
-                            $cc,
-                            $check,
-                            implode(' -> ', $circular)
-                        ));
-                    }
-
+                    $this->validCircularReferences($current['name'], $cc, $check, $circular);
                     $this->validBranch($cc, $circular);
                 }
             }
+        }
+    }
+
+    /**
+     * Validate the current element class.
+     *
+     * @param array $current The current element
+     *
+     * @throws InvalidElementException If the current element defines a class which doesn't exist
+     */
+    private function validClass(array $current)
+    {
+        if (isset($current['class']) && !class_exists($current['class'])) {
+            throw new InvalidElementException(sprintf(
+                'The element "%s" define a class which doesn\'t exist.',
+                $current['name']
+            ));
+        }
+    }
+
+    /**
+     * Validate himself references.
+     *
+     * @param string $name         The current element name
+     * @param array  $currentCheck The current check context
+     * @param string $check        The current check name
+     *
+     * @throws InvalidElementException If the current element defines himself as parent, children or extends
+     */
+    private function validDefineHimself($name, array $currentCheck, $check)
+    {
+        if (in_array($name, $currentCheck)) {
+            throw new InvalidElementException(sprintf(
+                'Element "%s" cannot define himself as %s.',
+                $name,
+                $check
+            ));
+        }
+    }
+
+    /**
+     * Validate circular references.
+     *
+     * @param string       $name         The current element name
+     * @param string|array $currentCheck The current check context
+     * @param string       $check        The current check name
+     * @param array        $circular     The names of the previous elements called
+     *
+     * @throws InvalidElementException If the current element defines a parent, child or extends which creates circular
+     *                                 reference
+     */
+    private function validCircularReferences($name, $currentCheck, $check, array $circular)
+    {
+        if (!is_array($currentCheck) && in_array($currentCheck, $circular)) {
+            $circular[] = $currentCheck;
+
+            throw new InvalidElementException(sprintf(
+                'Element "%s" cannot define "%s" as %s. It\'s a circular reference. [%s]',
+                $name,
+                $currentCheck,
+                $check,
+                implode(' -> ', $circular)
+            ));
         }
     }
 
