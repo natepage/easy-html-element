@@ -378,35 +378,19 @@ class HtmlElement implements HtmlElementInterface
      * @param bool   $mainCall   Determine if it's the main(first) call of the method
      *
      * @return array
-     *
-     * @throws UndefinedElementException If the current element doesn't exist
      */
     private function resolveElement($name, array $parameters, $mainCall = false)
     {
-        $getCurrent = true;
-        $current = array();
+        $current = $this->getCurrentElement($name);
 
-        if (is_array($name)) {
-            $current = $name;
-            $name = $current['name'];
-
-            $getCurrent = false;
-        }
+        $name = $current['name'];
 
         if ($this->alreadyResolved($name)) {
             return $this->resolved[$name];
         }
 
-        if ($getCurrent && !$this->exists($name)) {
-            throw new UndefinedElementException(sprintf('The element with name "%s" does not exist.', $name));
-        }
-
         if ($mainCall) {
             $this->validBranch($name);
-        }
-
-        if ($getCurrent) {
-            $current = $this->getCurrentElement($name);
         }
 
         foreach ($this->defaults as $default => $value) {
@@ -453,36 +437,16 @@ class HtmlElement implements HtmlElementInterface
      * @param string $name     The current element name
      * @param array  $circular The array of elements names called in the current branch of map
      *
-     * @throws InvalidElementException   If the current element is defined dynamically and doesn't define a name
-     *                                   If the current element define a parent, child or extends which creates circular
+     * @throws InvalidElementException   If the current element define a parent, child or extends which creates circular
      *                                   declaration
      * @throws UndefinedElementException If the current element define a parent, child or extends which doesn't exist
      */
     private function validBranch($name, array $circular = array())
     {
-        $getCurrent = true;
+        $current = $this->getCurrentElement($name);
 
-        if (is_array($name)) {
-            if (!isset($name['name'])) {
-                throw new InvalidElementException(sprintf(
-                    'Elements defined dynamically in parent or children must define a name. [%s]',
-                    implode(' -> ', $circular)
-                ));
-            }
-
-            $current = $name;
-
-            $name = $current['name'];
-            unset($current['name']);
-
-            $getCurrent = false;
-        }
-
+        $name = $current['name'];
         $circular[] = $name;
-
-        if ($getCurrent) {
-            $current = $this->getCurrentElement($name);
-        }
 
         if (isset($current['class']) && !class_exists($current['class'])) {
             throw new InvalidElementException(sprintf('The element "%s" define a class which doesn\'t exist.', $name));
@@ -501,15 +465,6 @@ class HtmlElement implements HtmlElementInterface
                 }
 
                 foreach ($currentCheck as $cc) {
-                    if (!is_array($cc) && !$this->exists($cc)) {
-                        throw new UndefinedElementException(sprintf(
-                            'The element "%s" defines a %s "%s" wich doesn\'t exist.',
-                            $name,
-                            $check,
-                            $cc
-                        ));
-                    }
-
                     if (!is_array($cc) && in_array($cc, $circular)) {
                         $circular[] = $cc;
 
@@ -534,10 +489,30 @@ class HtmlElement implements HtmlElementInterface
      * @param string $name The element name
      *
      * @return array
+     *
+     * @throws InvalidElementException   If the current element is defined dynamically and doesn't define a name
+     * @throws UndefinedElementException If the current element doesn't exist
      */
     private function getCurrentElement($name)
     {
-        return $this->map[lcfirst($name)];
+        if (is_array($name)) {
+            if (!isset($name['name'])) {
+                throw new InvalidElementException(sprintf(
+                    'Elements defined dynamically in parent or children must define a name.'
+                ));
+            }
+
+            return $name;
+        }
+
+        if (!$this->exists($name)) {
+            throw new UndefinedElementException(sprintf('The element with name "%s" does not exist.', $name));
+        }
+
+        $current = $this->map[lcfirst($name)];
+        $current['name'] = $name;
+
+        return $current;
     }
 
     /**
