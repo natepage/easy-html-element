@@ -355,7 +355,7 @@ class HtmlElement implements HtmlElementInterface
         }
 
         $children = array();
-        foreach ((array)$element['children'] as $child) {
+        foreach ((array) $element['children'] as $child) {
             $children[] = $this->getInstance($child, $parameters);
         }
 
@@ -417,7 +417,7 @@ class HtmlElement implements HtmlElementInterface
 
         $current = $this->replaceParameters($current, $parameters);
 
-        foreach ((array)$current['extends'] as $extend) {
+        foreach ((array) $current['extends'] as $extend) {
             $extend = $this->resolveElement($extend, $parameters);
             $current = $this->extendElement($extend, $current);
         }
@@ -490,7 +490,7 @@ class HtmlElement implements HtmlElementInterface
 
         foreach ($this->checks as $check) {
             if (isset($current[$check])) {
-                $currentCheck = (array)$current[$check];
+                $currentCheck = (array) $current[$check];
 
                 if (in_array($name, $currentCheck)) {
                     throw new InvalidElementException(sprintf(
@@ -557,7 +557,7 @@ class HtmlElement implements HtmlElementInterface
 
             if (is_string($value)) {
                 foreach ($parameters as $parameter => $replace) {
-                    $value = str_replace('%' . $parameter . '%', $replace, $value);
+                    $value = str_replace('%'.$parameter.'%', $replace, $value);
                 }
 
                 $element[$key] = $value;
@@ -596,7 +596,7 @@ class HtmlElement implements HtmlElementInterface
     {
         foreach ($from as $key => $value) {
             if (in_array($key, $this->mergeableAttributes) && isset($to[$key])) {
-                $to[$key] = array_merge((array)$to[$key], (array)$value);
+                $to[$key] = array_merge((array) $to[$key], (array) $value);
             } elseif (!isset($to[$key])) {
                 $to[$key] = $value;
             } elseif (is_array($value)) {

@@ -33,7 +33,7 @@ class Element implements ElementInterface
 
     public function __toString()
     {
-        return (string)$this->renderRoot();
+        return (string) $this->renderRoot();
     }
 
     /**
