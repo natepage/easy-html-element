@@ -2,13 +2,13 @@
 
 namespace NatePage\EasyHtmlElement;
 
-use NatePage\EasyHtmlElement\Exception\InvalidElementException;
 use NatePage\EasyHtmlElement\Exception\InvalidArgumentsNumberException;
+use NatePage\EasyHtmlElement\Exception\InvalidElementException;
 use NatePage\EasyHtmlElement\Exception\UndefinedElementException;
 
 class HtmlElement implements HtmlElementInterface
 {
-    /** @var array  */
+    /** @var array */
     private $map;
 
     /** @var EscaperInterface */
@@ -55,9 +55,9 @@ class HtmlElement implements HtmlElementInterface
     /**
      * HtmlElement constructor.
      *
-     * @param array $map                     The elements map
-     * @param EscaperInterface|null $escaper The escaper, by default ZendFramework/Escaper is used
-     * @param string $encoding               The encoding used for escaping, by default utf-8 is used
+     * @param array                 $map      The elements map
+     * @param EscaperInterface|null $escaper  The escaper, by default ZendFramework/Escaper is used
+     * @param string                $encoding The encoding used for escaping, by default utf-8 is used
      */
     public function __construct(array $map = array(), EscaperInterface $escaper = null, $encoding = 'utf-8')
     {
@@ -66,201 +66,13 @@ class HtmlElement implements HtmlElementInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function setMap(array $map)
-    {
-        $this->map = $map;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMap()
-    {
-        return $this->map;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addOneToMap($name, array $element)
-    {
-        $this->map[$name] = $element;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addManyToMap(array $elements)
-    {
-        foreach($elements as $name => $element){
-            $this->addOneToMap($name, $element);
-        }
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setEscaper(EscaperInterface $escaper)
-    {
-        $this->escaper = $escaper;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getEscaper()
-    {
-        return $this->escaper;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setEscapeHtml($escapeHtml = true)
-    {
-        $this->escapeHtml = $escapeHtml;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isEscapeHtml()
-    {
-        return $this->escapeHtml;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setEscapeHtmlAttr($escapeHtmlAttr = true)
-    {
-        $this->escapeHtmlAttr = $escapeHtmlAttr;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isEscapeHtmlAttr()
-    {
-        return $this->escapeHtmlAttr;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setEscapeJs($escapeJs = true)
-    {
-        $this->escapeJs = $escapeJs;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isEscapeJs()
-    {
-        return $this->escapeJs;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setEscapeCss($escapeCss = true)
-    {
-        $this->escapeCss = $escapeCss;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isEscapeCss()
-    {
-        return $this->escapeCss;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setEscapeUrl($escapeUrl = true)
-    {
-        $this->escapeUrl = $escapeUrl;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isEscapeUrl()
-    {
-        return $this->escapeUrl;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function exists($name)
-    {
-        return array_key_exists(lcfirst($name), $this->map);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function load($name, array $parameters = array(), array $attributes = array(), array $children = array())
-    {
-        $element = $this->getInstance($name, $parameters, true);
-
-        $element->addAttributes($this->escapeAttributes($attributes));
-
-        foreach($children as $child){
-            $element->addChild($this->escape($child));
-        }
-
-        return $element;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function create($type = null, $text = null, array $attributes = array(), array $children = array())
-    {
-        $htmlElement = new HtmlElement();
-
-        $attributes = $htmlElement->escapeAttributes($attributes);
-
-        foreach($children as $key => $child){
-            $children[$key] = $htmlElement->escape($child);
-        }
-
-        return $htmlElement->escape(new Element($type, $text, $attributes, $children));
-    }
-
-    /**
      * Create element on static calls.
      *
-     * @param string $type     The element type
-     * @param array $arguments The arguments array to set:
-     *                         [0] = text (string)
-     *                         [1] = attributes (array)
-     *                         [2] = children (array)
+     * @param string $type      The element type
+     * @param array  $arguments The arguments array to set:
+     *                          [0] = text (string)
+     *                          [1] = attributes (array)
+     *                          [2] = children (array)
      *
      * @return ElementInterface
      *
@@ -268,7 +80,7 @@ class HtmlElement implements HtmlElementInterface
      */
     public static function __callStatic($type, $arguments)
     {
-        switch(count($arguments)){
+        switch (count($arguments)) {
             case 0:
                 return self::create($type);
             case 1:
@@ -289,23 +101,17 @@ class HtmlElement implements HtmlElementInterface
     /**
      * {@inheritdoc}
      */
-    public function escape(ElementInterface $element)
+    public static function create($type = null, $text = null, array $attributes = array(), array $children = array())
     {
-        if($this->escapeHtml && !in_array($element->getType(), $this->specialEscapingTypes)){
-            $element->setText($this->escaper->escapeHtml($element->getText()));
+        $htmlElement = new HtmlElement();
+
+        $attributes = $htmlElement->escapeAttributes($attributes);
+
+        foreach ($children as $key => $child) {
+            $children[$key] = $htmlElement->escape($child);
         }
 
-        $element->setAttributes($this->escapeAttributes($element->getAttributes()));
-
-        if($this->escapeJs && 'script' == $element->getType()){
-            $element->setText($this->escaper->escapeJs($element->getText()));
-        }
-
-        if($this->escapeCss && 'style' == $element->getType()){
-            $element->setText($this->escaper->escapeCss($element->getText()));
-        }
-
-        return $element;
+        return $htmlElement->escape(new Element($type, $text, $attributes, $children));
     }
 
     /**
@@ -313,14 +119,14 @@ class HtmlElement implements HtmlElementInterface
      */
     public function escapeAttributes(array $attributes)
     {
-        if($this->escapeHtmlAttr || $this->escapeUrl){
-            foreach($attributes as $attr => $value){
-                if('href' == $attr){
-                    if($this->escapeUrl){
+        if ($this->escapeHtmlAttr || $this->escapeUrl) {
+            foreach ($attributes as $attr => $value) {
+                if ('href' == $attr) {
+                    if ($this->escapeUrl) {
                         $value = $this->escaper->escapeUrl($value);
                     }
                 } else {
-                    if($this->escapeHtmlAttr){
+                    if ($this->escapeHtmlAttr) {
                         $value = $this->escaper->escapeHtmlAttr($value);
                     }
                 }
@@ -333,13 +139,201 @@ class HtmlElement implements HtmlElementInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function escape(ElementInterface $element)
+    {
+        if ($this->escapeHtml && !in_array($element->getType(), $this->specialEscapingTypes)) {
+            $element->setText($this->escaper->escapeHtml($element->getText()));
+        }
+
+        $element->setAttributes($this->escapeAttributes($element->getAttributes()));
+
+        if ($this->escapeJs && 'script' == $element->getType()) {
+            $element->setText($this->escaper->escapeJs($element->getText()));
+        }
+
+        if ($this->escapeCss && 'style' == $element->getType()) {
+            $element->setText($this->escaper->escapeCss($element->getText()));
+        }
+
+        return $element;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMap()
+    {
+        return $this->map;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setMap(array $map)
+    {
+        $this->map = $map;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addManyToMap(array $elements)
+    {
+        foreach ($elements as $name => $element) {
+            $this->addOneToMap($name, $element);
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addOneToMap($name, array $element)
+    {
+        $this->map[$name] = $element;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEscaper()
+    {
+        return $this->escaper;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEscaper(EscaperInterface $escaper)
+    {
+        $this->escaper = $escaper;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isEscapeHtml()
+    {
+        return $this->escapeHtml;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEscapeHtml($escapeHtml = true)
+    {
+        $this->escapeHtml = $escapeHtml;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isEscapeHtmlAttr()
+    {
+        return $this->escapeHtmlAttr;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEscapeHtmlAttr($escapeHtmlAttr = true)
+    {
+        $this->escapeHtmlAttr = $escapeHtmlAttr;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isEscapeJs()
+    {
+        return $this->escapeJs;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEscapeJs($escapeJs = true)
+    {
+        $this->escapeJs = $escapeJs;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isEscapeCss()
+    {
+        return $this->escapeCss;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEscapeCss($escapeCss = true)
+    {
+        $this->escapeCss = $escapeCss;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isEscapeUrl()
+    {
+        return $this->escapeUrl;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEscapeUrl($escapeUrl = true)
+    {
+        $this->escapeUrl = $escapeUrl;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function load($name, array $parameters = array(), array $attributes = array(), array $children = array())
+    {
+        $element = $this->getInstance($name, $parameters, true);
+
+        $element->addAttributes($this->escapeAttributes($attributes));
+
+        foreach ($children as $child) {
+            $element->addChild($this->escape($child));
+        }
+
+        return $element;
+    }
+
+    /**
      * Get the element instance.
      *
-     * @param string $name      The element name
-     * @param array $parameters The parameters to replace in element
-     * @param bool $mainCall    Determine if it's the main(first) call of the method
+     * @param string $name       The element name
+     * @param array  $parameters The parameters to replace in element
+     * @param bool   $mainCall   Determine if it's the main(first) call of the method
      *
      * @return ElementInterface
+     *
+     * @throws InvalidElementException If the current instance doesn't implement ElementInterface
      */
     private function getInstance($name, array $parameters, $mainCall = false)
     {
@@ -352,7 +346,7 @@ class HtmlElement implements HtmlElementInterface
 
         $instance = new $class($type, $text, $attributes);
 
-        if(!$instance instanceof ElementInterface){
+        if (!$instance instanceof ElementInterface) {
             throw new InvalidElementException(sprintf(
                 'The element "%s" does not implement the %s',
                 get_class($instance),
@@ -361,13 +355,13 @@ class HtmlElement implements HtmlElementInterface
         }
 
         $children = array();
-        foreach((array) $element['children'] as $child){
+        foreach ((array)$element['children'] as $child) {
             $children[] = $this->getInstance($child, $parameters);
         }
 
         $instance->setChildren($children);
 
-        if(null !== $element['parent']){
+        if (null !== $element['parent']) {
             $parent = $this->getInstance($element['parent'], $parameters);
 
             $parent->addChild($instance);
@@ -379,49 +373,51 @@ class HtmlElement implements HtmlElementInterface
     /**
      * Get the resolved element representation.
      *
-     * @param string $name      The current element name
-     * @param array $parameters The parameters to replace in element
-     * @param bool $mainCall    Determine if it's the main(first) call of the method
+     * @param string $name       The current element name
+     * @param array  $parameters The parameters to replace in element
+     * @param bool   $mainCall   Determine if it's the main(first) call of the method
      *
      * @return array
+     *
+     * @throws UndefinedElementException If the current element doesn't exist
      */
     private function resolveElement($name, array $parameters, $mainCall = false)
     {
         $getCurrent = true;
         $current = array();
 
-        if(is_array($name)){
+        if (is_array($name)) {
             $current = $name;
             $name = $current['name'];
 
             $getCurrent = false;
         }
 
-        if($this->alreadyResolved($name)){
+        if ($this->alreadyResolved($name)) {
             return $this->resolved[$name];
         }
 
-        if($getCurrent && !$this->exists($name)){
+        if ($getCurrent && !$this->exists($name)) {
             throw new UndefinedElementException(sprintf('The element with name "%s" does not exist.', $name));
         }
 
-        if($mainCall){
+        if ($mainCall) {
             $this->validBranch($name);
         }
 
-        if($getCurrent){
+        if ($getCurrent) {
             $current = $this->getCurrentElement($name);
         }
 
-        foreach($this->defaults as $default => $value){
-            if(!isset($current[$default])){
+        foreach ($this->defaults as $default => $value) {
+            if (!isset($current[$default])) {
                 $current[$default] = $value;
             }
         }
 
         $current = $this->replaceParameters($current, $parameters);
 
-        foreach((array) $current['extends'] as $extend){
+        foreach ((array)$current['extends'] as $extend) {
             $extend = $this->resolveElement($extend, $parameters);
             $current = $this->extendElement($extend, $current);
         }
@@ -444,10 +440,18 @@ class HtmlElement implements HtmlElementInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function exists($name)
+    {
+        return array_key_exists(lcfirst($name), $this->map);
+    }
+
+    /**
      * Valid the current map branch.
      *
-     * @param string $name               The current element name
-     * @param array $circular            The array of elements names called in the current branch of map
+     * @param string $name     The current element name
+     * @param array  $circular The array of elements names called in the current branch of map
      *
      * @throws InvalidElementException   If the current element is defined dynamically and doesn't define a name
      *                                   If the current element define a parent, child or extends which creates circular
@@ -458,10 +462,11 @@ class HtmlElement implements HtmlElementInterface
     {
         $getCurrent = true;
 
-        if(is_array($name)){
-            if(!isset($name['name'])){
+        if (is_array($name)) {
+            if (!isset($name['name'])) {
                 throw new InvalidElementException(sprintf(
-                    'Elements defined dynamically in parent or children must define a name.'
+                    'Elements defined dynamically in parent or children must define a name. [%s]',
+                    implode(' -> ', $circular)
                 ));
             }
 
@@ -475,22 +480,19 @@ class HtmlElement implements HtmlElementInterface
 
         $circular[] = $name;
 
-        if($getCurrent){
+        if ($getCurrent) {
             $current = $this->getCurrentElement($name);
         }
 
-        if(isset($current['class']) && !class_exists($current['class'])){
-            throw new InvalidElementException(sprintf(
-                'The element "%s" define a class which doesn\'t exist.',
-                $name
-            ));
+        if (isset($current['class']) && !class_exists($current['class'])) {
+            throw new InvalidElementException(sprintf('The element "%s" define a class which doesn\'t exist.', $name));
         }
 
-        foreach($this->checks as $check){
-            if(isset($current[$check])){
-                $currentCheck = (array) $current[$check];
+        foreach ($this->checks as $check) {
+            if (isset($current[$check])) {
+                $currentCheck = (array)$current[$check];
 
-                if(in_array($name, $currentCheck)){
+                if (in_array($name, $currentCheck)) {
                     throw new InvalidElementException(sprintf(
                         'Element "%s" cannot define himself as %s.',
                         $name,
@@ -498,8 +500,8 @@ class HtmlElement implements HtmlElementInterface
                     ));
                 }
 
-                foreach($currentCheck as $cc){
-                    if(!is_array($cc) && !$this->exists($cc)){
+                foreach ($currentCheck as $cc) {
+                    if (!is_array($cc) && !$this->exists($cc)) {
                         throw new UndefinedElementException(sprintf(
                             'The element "%s" defines a %s "%s" wich doesn\'t exist.',
                             $name,
@@ -508,7 +510,7 @@ class HtmlElement implements HtmlElementInterface
                         ));
                     }
 
-                    if(!is_array($cc) && in_array($cc, $circular)){
+                    if (!is_array($cc) && in_array($cc, $circular)) {
                         $circular[] = $cc;
 
                         throw new InvalidElementException(sprintf(
@@ -516,7 +518,7 @@ class HtmlElement implements HtmlElementInterface
                             $name,
                             $cc,
                             $check,
-                            implode('->', $circular)
+                            implode(' -> ', $circular)
                         ));
                     }
 
@@ -536,6 +538,33 @@ class HtmlElement implements HtmlElementInterface
     private function getCurrentElement($name)
     {
         return $this->map[lcfirst($name)];
+    }
+
+    /**
+     * Replace the parameters of the element.
+     *
+     * @param array $element    The element with the parameters to replace
+     * @param array $parameters The array of parameters values
+     *
+     * @return array
+     */
+    private function replaceParameters(array $element, array $parameters)
+    {
+        foreach ($element as $key => $value) {
+            if (is_array($value)) {
+                $element[$key] = $this->replaceParameters($value, $parameters);
+            }
+
+            if (is_string($value)) {
+                foreach ($parameters as $parameter => $replace) {
+                    $value = str_replace('%' . $parameter . '%', $replace, $value);
+                }
+
+                $element[$key] = $value;
+            }
+        }
+
+        return $element;
     }
 
     /**
@@ -565,43 +594,16 @@ class HtmlElement implements HtmlElementInterface
      */
     private function extendAttributes(array $from, array $to)
     {
-        foreach($from as $key => $value){
-            if(in_array($key, $this->mergeableAttributes) && isset($to[$key])){
-                $to[$key] = array_merge((array) $to[$key], (array) $value);
-            } elseif(!isset($to[$key])){
+        foreach ($from as $key => $value) {
+            if (in_array($key, $this->mergeableAttributes) && isset($to[$key])) {
+                $to[$key] = array_merge((array)$to[$key], (array)$value);
+            } elseif (!isset($to[$key])) {
                 $to[$key] = $value;
-            } elseif(is_array($value)){
+            } elseif (is_array($value)) {
                 $to[$key] = $this->extendAttributes($value, $to[$key]);
             }
         }
 
         return $to;
-    }
-
-    /**
-     * Replace the parameters of the element.
-     *
-     * @param array $element    The element with the parameters to replace
-     * @param array $parameters The array of parameters values
-     *
-     * @return array
-     */
-    private function replaceParameters(array $element, array $parameters)
-    {
-        foreach($element as $key => $value){
-            if(is_array($value)){
-                $element[$key] = $this->replaceParameters($value, $parameters);
-            }
-
-            if(is_string($value)){
-                foreach($parameters as $parameter => $replace){
-                    $value = str_replace('%'.$parameter.'%', $replace, $value);
-                }
-
-                $element[$key] = $value;
-            }
-        }
-
-        return $element;
     }
 }

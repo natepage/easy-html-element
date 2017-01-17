@@ -7,10 +7,10 @@ interface HtmlElementInterface
     /**
      * Create a html element.
      *
-     * @param string $type      The element type
-     * @param string $text      The element text
-     * @param array $attributes The element attributes
-     * @param array $children   The element children
+     * @param string $type       The element type
+     * @param string $text       The element text
+     * @param array  $attributes The element attributes
+     * @param array  $children   The element children
      *
      * @return ElementInterface
      */
@@ -19,10 +19,10 @@ interface HtmlElementInterface
     /**
      * Load a html element.
      *
-     * @param string $name      The element name
-     * @param array $parameters The element parameters
-     * @param array $attributes The element attributes
-     * @param array $children   The element children
+     * @param string $name       The element name
+     * @param array  $parameters The element parameters
+     * @param array  $attributes The element attributes
+     * @param array  $children   The element children
      *
      * @return ElementInterface
      */
@@ -56,8 +56,8 @@ interface HtmlElementInterface
     /**
      * Add one element to the map.
      *
-     * @param string $name   The element name
-     * @param array $element The element array to add
+     * @param string $name    The element name
+     * @param array  $element The element array to add
      *
      * @return HtmlElementInterface
      */

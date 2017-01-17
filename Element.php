@@ -7,7 +7,7 @@ use HtmlGenerator\Markup;
 
 class Element implements ElementInterface
 {
-    /** @var string  */
+    /** @var string */
     protected $type;
 
     /** @var string */
@@ -33,149 +33,7 @@ class Element implements ElementInterface
 
     public function __toString()
     {
-        return (string) $this->renderRoot();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setType($type = null)
-    {
-        if(null !== $type){
-            $this->type = $type;
-        }
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setText($text = null)
-    {
-        if(null !== $text){
-            $this->text = $text;
-        }
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getText()
-    {
-        return $this->text;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addAttribute($key, $value)
-    {
-        $this->attributes[$key] = $value;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addAttributes(array $attributes)
-    {
-        foreach($attributes as $key => $value){
-            $this->addAttribute($key, $value);
-        }
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setAttributes(array $attributes = array())
-    {
-        $this->attributes = $attributes;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAttributes()
-    {
-        return $this->attributes;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addChild(ElementInterface $child)
-    {
-        $this->children[] = $child;
-
-        $child->setParent($this);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addChildren(array $children)
-    {
-        foreach($children as $child){
-            $this->addChild($child);
-        }
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setChildren(array $children = array())
-    {
-        $this->children = array();
-
-        $this->addChildren($children);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getChildren()
-    {
-        return $this->children;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setParent(ElementInterface $parent = null)
-    {
-        $this->parent = $parent;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getParent()
-    {
-        return $this->parent;
+        return (string)$this->renderRoot();
     }
 
     /**
@@ -204,34 +62,176 @@ class Element implements ElementInterface
     }
 
     /**
+     * Set Markup element attributes.
+     *
+     * @param Markup $element
+     * @param array  $attributes
+     */
+    private function renderAttributes(Markup $element, array $attributes)
+    {
+        foreach ($attributes as $attr => $value) {
+            if (is_array($value)) {
+                $glue = 'style' == $attr ? '; ' : ' ';
+                $value = implode($glue, $value);
+            }
+
+            if (null !== $value) {
+                $element->set($attr, $value);
+            }
+        }
+    }
+
+    /**
      * Render element children.
      *
      * @param Markup $root
      */
     private function renderChildren(Markup $root)
     {
-        foreach($this->children as $child){
+        foreach ($this->children as $child) {
             $child->render($root);
         }
     }
 
     /**
-     * Set Markup element attributes.
-     *
-     * @param Markup $element
-     * @param array $attributes
+     * {@inheritdoc}
      */
-    private function renderAttributes(Markup $element, array $attributes)
+    public function getType()
     {
-        foreach($attributes as $attr => $value){
-            if(is_array($value)){
-                $glue = 'style' == $attr ? '; ' : ' ';
-                $value = implode($glue, $value);
-            }
+        return $this->type;
+    }
 
-            if(null !== $value){
-                $element->set($attr, $value);
-            }
+    /**
+     * {@inheritdoc}
+     */
+    public function setType($type = null)
+    {
+        if (null !== $type) {
+            $this->type = $type;
         }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setText($text = null)
+    {
+        if (null !== $text) {
+            $this->text = $text;
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addAttributes(array $attributes)
+    {
+        foreach ($attributes as $key => $value) {
+            $this->addAttribute($key, $value);
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addAttribute($key, $value)
+    {
+        $this->attributes[$key] = $value;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAttributes(array $attributes = array())
+    {
+        $this->attributes = $attributes;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addChildren(array $children)
+    {
+        foreach ($children as $child) {
+            $this->addChild($child);
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addChild(ElementInterface $child)
+    {
+        $this->children[] = $child;
+
+        $child->setParent($this);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setChildren(array $children = array())
+    {
+        $this->children = array();
+
+        $this->addChildren($children);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setParent(ElementInterface $parent = null)
+    {
+        $this->parent = $parent;
+
+        return $this;
     }
 }
