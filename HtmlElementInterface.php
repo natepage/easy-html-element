@@ -2,6 +2,9 @@
 
 namespace NatePage\EasyHtmlElement;
 
+use NatePage\EasyHtmlElement\Exception\InvalidElementException;
+use NatePage\EasyHtmlElement\Exception\UndefinedElementException;
+
 interface HtmlElementInterface
 {
     /**
@@ -73,6 +76,22 @@ interface HtmlElementInterface
     public function addManyToMap(array $elements);
 
     /**
+     * Set the HtmlElement branch validator.
+     *
+     * @param BranchValidatorInterface $branchValidator The branch validator to set
+     *
+     * @return HtmlElementInterface
+     */
+    public function setBranchValidator(BranchValidatorInterface $branchValidator);
+
+    /**
+     * Get the HtmlElement branch validator.
+     *
+     * @return BranchValidatorInterface
+     */
+    public function getBranchValidator();
+
+    /**
      * Set the HtmlElement escaper.
      *
      * @param EscaperInterface $escaper The escaper to set
@@ -89,100 +108,14 @@ interface HtmlElementInterface
     public function getEscaper();
 
     /**
-     * Apply escaping strategies to an element.
+     * Get the current element representation.
      *
-     * @param ElementInterface $element The element to escape
-     *
-     * @return ElementInterface
-     */
-    public function escape(ElementInterface $element);
-
-    /**
-     * Apply escaping strategies on element attributes.
-     *
-     * @param array $attributes The attributes array to escape
+     * @param string $name The element name
      *
      * @return array
+     *
+     * @throws InvalidElementException   If the current element is defined dynamically and doesn't define a name
+     * @throws UndefinedElementException If the current element doesn't exist
      */
-    public function escapeAttributes(array $attributes);
-
-    /**
-     * Determine if html is escaped or not
-     *
-     * @param bool $escapeHtml
-     *
-     * @return HtmlElementInterface
-     */
-    public function setEscapeHtml($escapeHtml = true);
-
-    /**
-     * Get the html escaping strategy.
-     *
-     * @return bool
-     */
-    public function isEscapeHtml();
-
-    /**
-     * Determine if html attributes are escaped or not
-     *
-     * @param bool $escapeHtmlAttr
-     *
-     * @return HtmlElementInterface
-     */
-    public function setEscapeHtmlAttr($escapeHtmlAttr = true);
-
-    /**
-     * Get the html attributes escaping strategy.
-     *
-     * @return bool
-     */
-    public function isEscapeHtmlAttr();
-
-    /**
-     * Determine if javascript is escaped or not
-     *
-     * @param bool $escapeJs
-     *
-     * @return HtmlElementInterface
-     */
-    public function setEscapeJs($escapeJs = true);
-
-    /**
-     * Get the javascript escaping strategy.
-     *
-     * @return bool
-     */
-    public function isEscapeJs();
-
-    /**
-     * Determine if css is escaped or not
-     *
-     * @param bool $escapeCss
-     *
-     * @return HtmlElementInterface
-     */
-    public function setEscapeCss($escapeCss = true);
-
-    /**
-     * Get the css escaping strategy.
-     *
-     * @return bool
-     */
-    public function isEscapeCss();
-
-    /**
-     * Determine if urls are escaped or not
-     *
-     * @param bool $escapeUrl
-     *
-     * @return HtmlElementInterface
-     */
-    public function setEscapeUrl($escapeUrl = true);
-
-    /**
-     * Get the urls escaping strategy.
-     *
-     * @return bool
-     */
-    public function isEscapeUrl();
+    public function getCurrentElement($name);
 }

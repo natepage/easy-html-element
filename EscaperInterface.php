@@ -5,47 +5,20 @@ namespace NatePage\EasyHtmlElement;
 interface EscaperInterface
 {
     /**
-     * Escape a string for an HTML body context.
+     * Apply escaping strategies to an element.
      *
-     * @param string $string The string to escape
+     * @param ElementInterface $element The element to escape
      *
-     * @return string
+     * @return ElementInterface
      */
-    public function escapeHtml($string);
+    public function escape(ElementInterface $element);
 
     /**
-     * Escape a string for an HTML attribute context.
+     * Apply escaping strategies on element attributes.
      *
-     * @param string $string The string to escape
+     * @param array $attributes The attributes array to escape
      *
-     * @return string
+     * @return array
      */
-    public function escapeHtmlAttr($string);
-
-    /**
-     * Escape a string for a Javascript context.
-     *
-     * @param string $string The string to escape
-     *
-     * @return string
-     */
-    public function escapeJs($string);
-
-    /**
-     * Escape a string for a CSS context.
-     *
-     * @param string $string The string to escape
-     *
-     * @return string
-     */
-    public function escapeCss($string);
-
-    /**
-     * Escape a string for a URI or URI parameter context
-     *
-     * @param string $string The string to escape
-     *
-     * @return string
-     */
-    public function escapeUrl($string);
+    public function escapeAttributes(array $attributes);
 }

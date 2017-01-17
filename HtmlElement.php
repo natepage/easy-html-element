@@ -14,6 +14,9 @@ class HtmlElement implements HtmlElementInterface
     /** @var EscaperInterface */
     private $escaper;
 
+    /** @var BranchValidatorInterface */
+    private $branchValidator;
+
     /** @var array The already resolved elements */
     private $resolved = array();
 
@@ -28,40 +31,25 @@ class HtmlElement implements HtmlElementInterface
         'class' => Element::class
     );
 
-    /** @var array The options to check to valid a branch */
-    private $checks = array('parent', 'extends', 'children');
-
     /** @var array The mergeable attributes */
     private $mergeableAttributes = array('class', 'style');
-
-    /** @var array The special escaping types */
-    private $specialEscapingTypes = array('script', 'style');
-
-    /** @var bool Determine if html is escaped or not */
-    private $escapeHtml = true;
-
-    /** @var bool Determine if html attributes are escaped or not */
-    private $escapeHtmlAttr = true;
-
-    /** @var bool Determine if javascript is escaped or not */
-    private $escapeJs = true;
-
-    /** @var bool Determine if css is escaped or not */
-    private $escapeCss = true;
-
-    /** @var bool Determine if urls are escaped or not */
-    private $escapeUrl = true;
 
     /**
      * HtmlElement constructor.
      *
-     * @param array                 $map      The elements map
-     * @param EscaperInterface|null $escaper  The escaper, by default ZendFramework/Escaper is used
-     * @param string                $encoding The encoding used for escaping, by default utf-8 is used
+     * @param array                         $map             The elements map
+     * @param BranchValidatorInterface|null $branchValidator The branch validator
+     * @param EscaperInterface|null         $escaper         The escaper, by default ZendFramework/Escaper is used
+     * @param string                        $encoding        The encoding used for escaping, by default utf-8 is used
      */
-    public function __construct(array $map = array(), EscaperInterface $escaper = null, $encoding = 'utf-8')
+    public function __construct(
+        array $map = array(),
+        BranchValidatorInterface $branchValidator = null,
+        EscaperInterface $escaper = null,
+        $encoding = 'utf-8')
     {
         $this->map = $map;
+        $this->branchValidator = null !== $branchValidator ? $branchValidator : new BranchValidator($this);
         $this->escaper = null !== $escaper ? $escaper : new Escaper($encoding);
     }
 
@@ -104,60 +92,15 @@ class HtmlElement implements HtmlElementInterface
     public static function create($type = null, $text = null, array $attributes = array(), array $children = array())
     {
         $htmlElement = new HtmlElement();
+        $escaper = $htmlElement->getEscaper();
 
-        $attributes = $htmlElement->escapeAttributes($attributes);
+        $attributes = $escaper->escapeAttributes($attributes);
 
         foreach ($children as $key => $child) {
-            $children[$key] = $htmlElement->escape($child);
+            $children[$key] = $escaper->escape($child);
         }
 
-        return $htmlElement->escape(new Element($type, $text, $attributes, $children));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function escapeAttributes(array $attributes)
-    {
-        if ($this->escapeHtmlAttr || $this->escapeUrl) {
-            foreach ($attributes as $attr => $value) {
-                if ('href' == $attr) {
-                    if ($this->escapeUrl) {
-                        $value = $this->escaper->escapeUrl($value);
-                    }
-                } else {
-                    if ($this->escapeHtmlAttr) {
-                        $value = $this->escaper->escapeHtmlAttr($value);
-                    }
-                }
-
-                $attributes[$attr] = $value;
-            }
-        }
-
-        return $attributes;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function escape(ElementInterface $element)
-    {
-        if ($this->escapeHtml && !in_array($element->getType(), $this->specialEscapingTypes)) {
-            $element->setText($this->escaper->escapeHtml($element->getText()));
-        }
-
-        $element->setAttributes($this->escapeAttributes($element->getAttributes()));
-
-        if ($this->escapeJs && 'script' == $element->getType()) {
-            $element->setText($this->escaper->escapeJs($element->getText()));
-        }
-
-        if ($this->escapeCss && 'style' == $element->getType()) {
-            $element->setText($this->escaper->escapeCss($element->getText()));
-        }
-
-        return $element;
+        return $escaper->escape(new Element($type, $text, $attributes, $children));
     }
 
     /**
@@ -203,6 +146,24 @@ class HtmlElement implements HtmlElementInterface
     /**
      * {@inheritdoc}
      */
+    public function getBranchValidator()
+    {
+        return $this->branchValidator;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBranchValidator(BranchValidatorInterface $branchValidator)
+    {
+        $this->branchValidator = $branchValidator;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getEscaper()
     {
         return $this->escaper;
@@ -221,104 +182,14 @@ class HtmlElement implements HtmlElementInterface
     /**
      * {@inheritdoc}
      */
-    public function isEscapeHtml()
-    {
-        return $this->escapeHtml;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setEscapeHtml($escapeHtml = true)
-    {
-        $this->escapeHtml = $escapeHtml;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isEscapeHtmlAttr()
-    {
-        return $this->escapeHtmlAttr;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setEscapeHtmlAttr($escapeHtmlAttr = true)
-    {
-        $this->escapeHtmlAttr = $escapeHtmlAttr;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isEscapeJs()
-    {
-        return $this->escapeJs;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setEscapeJs($escapeJs = true)
-    {
-        $this->escapeJs = $escapeJs;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isEscapeCss()
-    {
-        return $this->escapeCss;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setEscapeCss($escapeCss = true)
-    {
-        $this->escapeCss = $escapeCss;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isEscapeUrl()
-    {
-        return $this->escapeUrl;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setEscapeUrl($escapeUrl = true)
-    {
-        $this->escapeUrl = $escapeUrl;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function load($name, array $parameters = array(), array $attributes = array(), array $children = array())
     {
         $element = $this->getInstance($name, $parameters, true);
 
-        $element->addAttributes($this->escapeAttributes($attributes));
+        $element->addAttributes($this->escaper->escapeAttributes($attributes));
 
         foreach ($children as $child) {
-            $element->addChild($this->escape($child));
+            $element->addChild($this->escaper->escape($child));
         }
 
         return $element;
@@ -367,7 +238,7 @@ class HtmlElement implements HtmlElementInterface
             $parent->addChild($instance);
         }
 
-        return $this->escape($instance);
+        return $this->escaper->escape($instance);
     }
 
     /**
@@ -390,7 +261,7 @@ class HtmlElement implements HtmlElementInterface
         }
 
         if ($mainCall) {
-            $this->validBranch($name);
+            $this->branchValidator->validateBranch($name);
         }
 
         foreach ($this->defaults as $default => $value) {
@@ -432,97 +303,6 @@ class HtmlElement implements HtmlElementInterface
     }
 
     /**
-     * Valid the current map branch.
-     *
-     * @param string $name     The current element name
-     * @param array  $circular The array of elements names called in the current branch of map
-     */
-    private function validBranch($name, array $circular = array())
-    {
-        $current = $this->getCurrentElement($name);
-
-        $circular[] = $current['name'];
-
-        $this->validClass($current);
-
-        foreach ($this->checks as $check) {
-            if (isset($current[$check])) {
-                $currentCheck = (array) $current[$check];
-
-                $this->validDefineHimself($current['name'], $currentCheck, $check);
-
-                foreach ($currentCheck as $cc) {
-                    $this->validCircularReferences($current['name'], $cc, $check, $circular);
-                    $this->validBranch($cc, $circular);
-                }
-            }
-        }
-    }
-
-    /**
-     * Validate the current element class.
-     *
-     * @param array $current The current element
-     *
-     * @throws InvalidElementException If the current element defines a class which doesn't exist
-     */
-    private function validClass(array $current)
-    {
-        if (isset($current['class']) && !class_exists($current['class'])) {
-            throw new InvalidElementException(sprintf(
-                'The element "%s" define a class which doesn\'t exist.',
-                $current['name']
-            ));
-        }
-    }
-
-    /**
-     * Validate himself references.
-     *
-     * @param string $name         The current element name
-     * @param array  $currentCheck The current check context
-     * @param string $check        The current check name
-     *
-     * @throws InvalidElementException If the current element defines himself as parent, children or extends
-     */
-    private function validDefineHimself($name, array $currentCheck, $check)
-    {
-        if (in_array($name, $currentCheck)) {
-            throw new InvalidElementException(sprintf(
-                'Element "%s" cannot define himself as %s.',
-                $name,
-                $check
-            ));
-        }
-    }
-
-    /**
-     * Validate circular references.
-     *
-     * @param string       $name         The current element name
-     * @param string|array $currentCheck The current check context
-     * @param string       $check        The current check name
-     * @param array        $circular     The names of the previous elements called
-     *
-     * @throws InvalidElementException If the current element defines a parent, child or extends which creates circular
-     *                                 reference
-     */
-    private function validCircularReferences($name, $currentCheck, $check, array $circular)
-    {
-        if (!is_array($currentCheck) && in_array($currentCheck, $circular)) {
-            $circular[] = $currentCheck;
-
-            throw new InvalidElementException(sprintf(
-                'Element "%s" cannot define "%s" as %s. It\'s a circular reference. [%s]',
-                $name,
-                $currentCheck,
-                $check,
-                implode(' -> ', $circular)
-            ));
-        }
-    }
-
-    /**
      * Get the current element representation.
      *
      * @param string $name The element name
@@ -532,7 +312,7 @@ class HtmlElement implements HtmlElementInterface
      * @throws InvalidElementException   If the current element is defined dynamically and doesn't define a name
      * @throws UndefinedElementException If the current element doesn't exist
      */
-    private function getCurrentElement($name)
+    public function getCurrentElement($name)
     {
         if (is_array($name)) {
             if (!isset($name['name'])) {
