@@ -19,15 +19,20 @@
         "zendframework/zend-escaper": "^2.5"
     },
     "autoload": {
-        "psr-4": { "NatePage\\EasyHtmlElement\\": "" },
-        "exclude-from-classmap": [
-            "/Tests/"
-        ]
+        "psr-4": { "NatePage\\EasyHtmlElement\\": "src/NatePage/EasyHtmlElement/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "NatePage\\EasyHtmlElement\\Tests\\": "tests/NatePage/EasyHtmlElement/Tests/" }
     },
     "suggest": {
         "symfony/yaml": "Allows you to define the elements map in YAML to make it easier !"
     },
     "support": {
         "issues": "https://github.com/natepage/easy-html-element/issues"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
     }
 }
