@@ -1,4 +1,4 @@
-<div align="center">
+<p align="center">
 
 #EasyHtmlElement
 
@@ -7,7 +7,8 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/natepage/easy-html-element.svg)](https://scrutinizer-ci.com/g/natepage/easy-html-element)
 
 An easy way to create simple or complex html elements in PHP.
-</div>
+
+</p>
 
 ---
 
