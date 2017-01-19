@@ -9,6 +9,9 @@ class Escaper extends BaseEscaper implements EscaperInterface
     /** @var array The special escaping types */
     private $specialEscapingTypes = array('script', 'style');
 
+    /** @var array The urls attributes */
+    private $urlsAttributes = array('href', 'src');
+
     /** @var bool Determine if html is escaped or not */
     private $escapeHtml = true;
 
@@ -21,7 +24,7 @@ class Escaper extends BaseEscaper implements EscaperInterface
     /** @var bool Determine if css is escaped or not */
     private $escapeCss = true;
 
-    /** @var bool Determine if urls are escaped or not */
+    /** @var bool Determine if urls parameters are escaped or not */
     private $escapeUrl = true;
 
     /**
@@ -31,11 +34,7 @@ class Escaper extends BaseEscaper implements EscaperInterface
     {
         if ($this->escapeHtmlAttr || $this->escapeUrl) {
             foreach ($attributes as $attr => $value) {
-                if ('href' == $attr) {
-                    if ($this->escapeUrl) {
-                        $value = $this->escapeUrl($value);
-                    }
-                } else {
+                if (!in_array($attr, $this->urlsAttributes)) {
                     if ($this->escapeHtmlAttr) {
                         $value = $this->escapeHtmlAttr($value);
                     }
@@ -68,6 +67,14 @@ class Escaper extends BaseEscaper implements EscaperInterface
         }
 
         return $element;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function escapeUrlParameter($parameter)
+    {
+        return $this->escapeUrl($parameter);
     }
 
     /**
@@ -158,5 +165,13 @@ class Escaper extends BaseEscaper implements EscaperInterface
         $this->escapeUrl = $escapeUrl;
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUrlsAttributes()
+    {
+        return $this->urlsAttributes;
     }
 }

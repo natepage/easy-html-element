@@ -54,11 +54,11 @@ class HtmlElement implements HtmlElementInterface
     }
 
     /**
-     * Create element on static calls.
+     * Load element on dynamic calls.
      *
-     * @param string $type      The element type
+     * @param string $name      The element name
      * @param array  $arguments The arguments array to set:
-     *                          [0] = text (string)
+     *                          [0] = parameters (array)
      *                          [1] = attributes (array)
      *                          [2] = children (array)
      *
@@ -66,17 +66,17 @@ class HtmlElement implements HtmlElementInterface
      *
      * @throws InvalidArgumentsNumberException If the arguments length is more than 3
      */
-    public static function __callStatic($type, $arguments)
+    public function __call($name, $arguments)
     {
         switch (count($arguments)) {
             case 0:
-                return self::create($type);
+                return $this->load($name);
             case 1:
-                return self::create($type, $arguments[0]);
+                return $this->load($name, $arguments[0]);
             case 2:
-                return self::create($type, $arguments[0], $arguments[1]);
+                return $this->load($name, $arguments[0], $arguments[1]);
             case 3:
-                return self::create($type, $arguments[0], $arguments[1], $arguments[2]);
+                return $this->load($name, $arguments[0], $arguments[1], $arguments[2]);
             default:
                 throw new InvalidArgumentsNumberException(sprintf(
                     'Maximum numbers of arguments is %d, [%d] given.',
@@ -84,23 +84,6 @@ class HtmlElement implements HtmlElementInterface
                     count($arguments)
                 ));
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function create($type = null, $text = null, array $attributes = array(), array $children = array())
-    {
-        $htmlElement = new HtmlElement();
-        $escaper = $htmlElement->getEscaper();
-
-        $attributes = $escaper->escapeAttributes($attributes);
-
-        foreach ($children as $key => $child) {
-            $children[$key] = $escaper->escape($child);
-        }
-
-        return $escaper->escape(new Element($type, $text, $attributes, $children));
     }
 
     /**
@@ -351,6 +334,10 @@ class HtmlElement implements HtmlElementInterface
 
             if (is_string($value)) {
                 foreach ($parameters as $parameter => $replace) {
+                    if(in_array($key, $this->escaper->getUrlsAttributes()) && $this->escaper->isEscapeUrl()){
+                        $replace = $this->escaper->escapeUrl($replace);
+                    }
+
                     $value = str_replace('%'.$parameter.'%', $replace, $value);
                 }
 

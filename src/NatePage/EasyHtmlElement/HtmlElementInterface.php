@@ -8,18 +8,6 @@ use NatePage\EasyHtmlElement\Exception\UndefinedElementException;
 interface HtmlElementInterface
 {
     /**
-     * Create a html element.
-     *
-     * @param string $type       The element type
-     * @param string $text       The element text
-     * @param array  $attributes The element attributes
-     * @param array  $children   The element children
-     *
-     * @return ElementInterface
-     */
-    public static function create($type = null, $text = null, array $attributes = array(), array $children = array());
-
-    /**
      * Load a html element.
      *
      * @param string $name       The element name

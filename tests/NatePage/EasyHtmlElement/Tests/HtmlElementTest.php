@@ -22,79 +22,23 @@ class HtmlElementTest extends \PHPUnit_Framework_TestCase
 
     public function testInterfaceElementInstance()
     {
-        $this->assertInstanceOf(ElementInterface::class, HtmlElement::create());
+        $html = new HtmlElement(array('myDiv' => array('type' => 'div')));
+
+        $this->assertInstanceOf(ElementInterface::class, $html->load('myDiv'));
     }
 
-    public function testStaticCreateDiv()
+    public function testDynamicDiv()
     {
-        $this->assertEquals(HtmlElement::create('div', $this->textInDiv), $this->renderDiv());
-    }
+        $map = array(
+            'myDiv' => array(
+                'type' => 'div',
+                'text' => $this->textInDiv
+            )
+        );
 
-    public function testStaticCreateDivWithAttribute()
-    {
-        $div = HtmlElement::create('div', $this->textInDiv, array($this->divAttr => 'value'));
+        $htmlElement = new HtmlElement($map);
 
-        $this->assertEquals($div, $this->renderDivWithAttribute());
-    }
-
-    public function testStaticCreateDivWithChild()
-    {
-        $div = HtmlElement::create('div', null, array(), array(
-            HtmlElement::create('span', $this->textInSpan)
-        ));
-
-        $this->assertEquals($div, $this->renderDivWithChild());
-    }
-
-    public function testStaticCreateDivWithAttributeAndChildren()
-    {
-        $div = HtmlElement::create('div', null, array($this->divAttr => 'value'), array(
-            HtmlElement::create('h1', $this->textInTitle, array($this->titleAttr => 'value')),
-            HtmlElement::create('span', $this->textInSpan, array($this->spanAttr => 'value'))
-        ));
-
-        $this->assertEquals($div, $this->renderDivWithAttributeAndChildren());
-    }
-
-    public function testStaticDynamicDiv()
-    {
-        $this->assertEquals(HtmlElement::div($this->textInDiv), $this->renderDiv());
-    }
-
-    public function testStaticDynamicDivWithAttribute()
-    {
-        $div = HtmlElement::div($this->textInDiv, array($this->divAttr => 'value'));
-
-        $this->assertEquals($div, $this->renderDivWithAttribute());
-    }
-
-    public function testStaticDynamicDivWithChild()
-    {
-        $div = HtmlElement::div(null, array(), array(
-            HtmlElement::span($this->textInSpan)
-        ));
-
-        $this->assertEquals($div, $this->renderDivWithChild());
-    }
-
-    public function testStaticDynamicDivWithAttributeAndChildren()
-    {
-        $div = HtmlElement::div(null, array($this->divAttr => 'value'), array(
-            HtmlElement::h1($this->textInTitle, array($this->titleAttr => 'value')),
-            HtmlElement::span($this->textInSpan, array($this->spanAttr => 'value'))
-        ));
-
-        $this->assertEquals($div, $this->renderDivWithAttributeAndChildren());
-    }
-
-    public function testRenderFromTheBottom()
-    {
-        HtmlElement::div(null, array($this->divAttr => 'value'), array(
-            HtmlElement::h1($this->textInTitle, array($this->titleAttr => 'value')),
-            $span = HtmlElement::span($this->textInSpan, array($this->spanAttr => 'value'))
-        ));
-
-        $this->assertEquals($span, $this->renderDivWithAttributeAndChildren());
+        $this->assertEquals($htmlElement->myDiv(), $this->renderDiv());
     }
 
     public function testMapDiv()
