@@ -358,9 +358,17 @@ class HtmlElement implements HtmlElementInterface
      */
     private function extendElement($extend, $current)
     {
-        $current['class'] = $extend['class'];
+        foreach ($this->defaults as $default => $value) {
+            if (!in_array($default, array('attr', 'children')) && $current[$default] === $value) {
+                $current[$default] = $extend[$default];
+            }
+        }
 
         $current['attr'] = $this->extendAttributes($extend['attr'], $current['attr']);
+
+        foreach ($extend['children'] as $child) {
+            $current['children'][] = $child;
+        }
 
         return $current;
     }
@@ -377,7 +385,7 @@ class HtmlElement implements HtmlElementInterface
     {
         foreach ($from as $key => $value) {
             if (in_array($key, $this->mergeableAttributes) && isset($to[$key])) {
-                $to[$key] = array_merge((array) $to[$key], (array) $value);
+                $to[$key] = $this->extendMergeableAttributes($value, $to[$key], $key);
             } elseif (!isset($to[$key])) {
                 $to[$key] = $value;
             } elseif (is_array($value)) {
@@ -386,5 +394,26 @@ class HtmlElement implements HtmlElementInterface
         }
 
         return $to;
+    }
+
+    /**
+     * Extend mergeable attributes from another element.
+     *
+     * @param string|array $from The attribute to extend
+     * @param string|array $to   The attribute which extends
+     * @param string       $attr The attribute name
+     *
+     * @return string
+     */
+    private function extendMergeableAttributes($from, $to, $attr)
+    {
+        $value = array_merge((array) $to, (array) $from);
+
+        switch ($attr) {
+            case 'class':
+                return implode(' ', $value);
+            case 'style':
+                return implode('; ', $value);
+        }
     }
 }
