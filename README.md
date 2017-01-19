@@ -1,12 +1,14 @@
 <p align="center">
 
-#EasyHtmlElement
+<h1>EasyHtmlElement</h1>
 
-<a href="https://travis-ci.org/natepage/easy-html-element"><img src="https://travis-ci.org/natepage/easy-html-element.svg?branch=master" alt="Build Status"></a>
-<a href="https://insight.sensiolabs.com/projects/1ca37d08-6889-4280-aa4c-5739bf2be48a"><img src="https://img.shields.io/sensiolabs/i/1ca37d08-6889-4280-aa4c-5739bf2be48a.svg" alt="SensioLabs Insight"></a>
-<a href="https://scrutinizer-ci.com/g/natepage/easy-html-element"><img src="https://img.shields.io/scrutinizer/g/natepage/easy-html-element.svg" alt="Quality Score"></a>
+<p>
+    <a href="https://travis-ci.org/natepage/easy-html-element"><img src="https://travis-ci.org/natepage/easy-html-element.svg?branch=master" alt="Build Status"></a>
+    <a href="https://insight.sensiolabs.com/projects/1ca37d08-6889-4280-aa4c-5739bf2be48a"><img src="https://img.shields.io/sensiolabs/i/1ca37d08-6889-4280-aa4c-5739bf2be48a.svg" alt="SensioLabs Insight"></a>
+    <a href="https://scrutinizer-ci.com/g/natepage/easy-html-element"><img src="https://img.shields.io/scrutinizer/g/natepage/easy-html-element.svg" alt="Quality Score"></a>
+</p>
 
-An easy way to create simple or complex html elements in PHP.
+<p>An easy way to create simple or complex html elements in PHP.</p>
 
 </p>
 
