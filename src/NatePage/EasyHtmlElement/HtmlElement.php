@@ -334,8 +334,8 @@ class HtmlElement implements HtmlElementInterface
 
             if (is_string($value)) {
                 foreach ($parameters as $parameter => $replace) {
-                    if(in_array($key, $this->escaper->getUrlsAttributes()) && $this->escaper->isEscapeUrl()){
-                        $replace = $this->escaper->escapeUrl($replace);
+                    if (in_array($key, $this->escaper->getUrlsAttributes()) && $this->escaper->isEscapeUrl()) {
+                        $replace = $this->escaper->escapeUrlParameter($replace);
                     }
 
                     $value = str_replace('%'.$parameter.'%', $replace, $value);
