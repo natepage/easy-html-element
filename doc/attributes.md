@@ -1,32 +1,9 @@
-#Documentation
+<h1 align="center">EasyHtmlElement</h1>
 
-####Attributes example
-``` php
-$map = array(
-    'myDiv' => array(
-        'type' => 'div',
-        'text' => 'Div Attributes Example',
-        'attr' => array(
-            'id' => 'id-my-div',
-            'class' => 'first-class second-class',
-            'anything' => 'value'
-        )
-    )
-);
+<p align="center">An easy way to create simple or complex HTML elements in PHP.</p>
 
-$htmlElement = new NatePage\EasyHtmlElement\HtmlElement();
-$div = $htmlElement->load('myDiv');
+---
 
-echo $div; 
+##Attributes
 
-/**
- * <div id="id-my-div" 
- *      class="first-class second-class" 
- *      anything="value"
- * >
- *      Div Attributes Example
- * </div>
- */
-```
-
-You can set every attributes you want on every html element!
+_Documentation in progress..._

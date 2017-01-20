@@ -4,6 +4,6 @@
 
 ---
 
-##Customization
+##Extends
 
 _Documentation in progress..._

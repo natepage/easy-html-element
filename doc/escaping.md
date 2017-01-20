@@ -4,6 +4,6 @@
 
 ---
 
-##Customization
+##Escaping
 
 _Documentation in progress..._

@@ -132,11 +132,13 @@ Here we have:
 * All the panel components extend the _Base div_ element to get the _div_ type
 * Base panel structure define _children_ to make its content
 * All elements define their own attributes with _attr_
+* Panel heading defines a dynamic child directly in its children array
 * Primary panel structure extends all the Base panel structure and add a css class
 * Some parameters with the _%parameter%_ syntax which allows you to define dynamic content
 
 A complex and dynamic html structure in just on method, that's what EasyHtmlElement promised you!
 
+##Documentation
 Does it make you want to learn more about the EasyHtmlElement power?
 
 Read the [documentation](doc/index.md).

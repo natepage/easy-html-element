@@ -1,42 +1,9 @@
-#Documentation
+<h1 align="center">EasyHtmlElement</h1>
 
-####Children example
-``` php
-$map = array(
-    'myDiv' => array(
-        'type' => 'div',
-        'attr' => array(
-            'id' => 'id-my-div',
-            'class' => 'first-class second-class',
-            'anything' => 'value'
-        ),
-        'children' => array(
-            'myTitle',
-            'myText'
-        )
-    ),
-    'myTitle' => array(
-        'type' => 'h1',
-        'text' => 'Title Parent Example'
-    ),
-    'myText' => array(
-        'type' => 'p',
-        'text' => 'Lorem ipsum...'
-    )
-);
+<p align="center">An easy way to create simple or complex HTML elements in PHP.</p>
 
-$htmlElement = new NatePage\EasyHtmlElement\HtmlElement();
-$div = $htmlElement->load('myDiv');
+---
 
-echo $div; 
+##Children
 
-/**
- * <div id="id-my-div" 
- *      class="first-class second-class" 
- *      anything="value"
- * >
- *      <h1>Title Parent Example</h1>
- *      <p>Lorem ipsum...</p>
- * </div>
- */
-```
+_Documentation in progress..._
