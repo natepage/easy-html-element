@@ -47,7 +47,7 @@ $map = array(
 
 * **(string | null) text:** The element content. You can put whatever you want as string value, by default HTML escaping strategy is applied on it to secure the generated code. More informations from [escaping](escaping.md).
 
-* **(array) attr:** The element attributes. It works like `array('attrName' => 'value')`. You can define any attributes you want and rendering is recursive so you define an attribute value as an array if you want. By default HTML attributes escaping strategy is applied on it to secure the generated code. More informations from [attributes](attributes.md) or [escaping](escaping.md).
+* **(array) attr:** The element attributes. It works like `array('attrName' => 'value')`. You can define any attributes you want. By default HTML attributes escaping strategy is applied on it to secure the generated code. More informations from [attributes](attributes.md) or [escaping](escaping.md).
 
 * **(string | array | null) parent:** The element parent which will frame the current element. By example a `span` element with a `div` parent will generate `<div><span></span></div>`. It could be the name of another defined element in the map. It could be an array which defines a dynamic element. By default is null, you can keep it if you don't want to define a parent for the current element. More informations from [parent](parent.md).
 

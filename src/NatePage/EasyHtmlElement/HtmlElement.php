@@ -243,6 +243,8 @@ class HtmlElement implements HtmlElementInterface
             return $this->resolved[$name];
         }
 
+        $current = $this->replaceParameters($current, $parameters);
+
         if ($mainCall) {
             $this->branchValidator->validateBranch($name);
         }
@@ -252,8 +254,6 @@ class HtmlElement implements HtmlElementInterface
                 $current[$default] = $value;
             }
         }
-
-        $current = $this->replaceParameters($current, $parameters);
 
         foreach ((array) $current['extends'] as $extend) {
             $extend = $this->resolveElement($extend, $parameters);

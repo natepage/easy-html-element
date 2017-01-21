@@ -34,7 +34,9 @@ class Escaper extends BaseEscaper implements EscaperInterface
     {
         if ($this->escapeHtmlAttr || $this->escapeUrl) {
             foreach ($attributes as $attr => $value) {
-                if (!in_array($attr, $this->urlsAttributes)) {
+                if (is_array($value)) {
+                    $value = $this->escapeAttributes($value);
+                } elseif (!in_array($attr, $this->urlsAttributes)) {
                     if ($this->escapeHtmlAttr) {
                         $value = $this->escapeHtmlAttr($value);
                     }
