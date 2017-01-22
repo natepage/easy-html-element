@@ -6,7 +6,7 @@
 
 ##Parent
 
-Elements parent is defined under the `parent` key. It can be another element name or an [dynamic element](dynamic_elements.md). An element can only have one parent which will frame it. But if you want to define the parent in relation to a particular case you can do it with a [parameter](parameters.md).
+Elements parent is defined under the `parent` key. It can be another element name or an [dynamic element](dynamic_elements.md). An element can only have one parent which will frame it.
  
 ```php
 $map = array(

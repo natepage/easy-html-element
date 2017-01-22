@@ -228,6 +228,23 @@ class HtmlElementTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($htmlElement->load('myDiv'), $this->renderDivWithAttribute());
     }
 
+    public function testMultipleDivWithParameters()
+    {
+        $map = array(
+            'div' => array(
+                'type' => 'div',
+                'text' => '%text%'
+            )
+        );
+
+        $htmlElement = new HtmlElement($map);
+
+        $firstDiv = $htmlElement->load('div', array('text' => 'My first div'));
+        $secondDiv = $htmlElement->load('div', array('text' => 'My second div'));
+
+        $this->assertEquals($firstDiv . $secondDiv, $this->renderMultipleDivWithParameters());
+    }
+
     private function renderDiv()
     {
         return sprintf('<div>%s</div>', $this->textInDiv);
@@ -252,5 +269,10 @@ class HtmlElementTest extends \PHPUnit_Framework_TestCase
             $this->spanAttr,
             $this->textInSpan
         );
+    }
+
+    private function renderMultipleDivWithParameters()
+    {
+        return '<div>My first div</div><div>My second div</div>';
     }
 }

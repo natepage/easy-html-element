@@ -240,10 +240,8 @@ class HtmlElement implements HtmlElementInterface
         $name = $current['name'];
 
         if ($this->alreadyResolved($name)) {
-            return $this->resolved[$name];
+            return $this->replaceParameters($this->resolved[$name], $parameters);
         }
-
-        $current = $this->replaceParameters($current, $parameters);
 
         if ($mainCall) {
             $this->branchValidator->validateBranch($name);
@@ -261,6 +259,8 @@ class HtmlElement implements HtmlElementInterface
         }
 
         $this->resolved[$name] = $current;
+
+        $current = $this->replaceParameters($current, $parameters);
 
         return $current;
     }
@@ -318,7 +318,7 @@ class HtmlElement implements HtmlElementInterface
     }
 
     /**
-     * Replace the parameters of the element.
+     * Replace parameters in text and attr.
      *
      * @param array $element    The element with the parameters to replace
      * @param array $parameters The array of parameters values
@@ -327,25 +327,42 @@ class HtmlElement implements HtmlElementInterface
      */
     private function replaceParameters(array $element, array $parameters)
     {
-        foreach ($element as $key => $value) {
-            if (is_array($value)) {
-                $element[$key] = $this->replaceParameters($value, $parameters);
-            }
-
-            if (is_string($value)) {
-                foreach ($parameters as $parameter => $replace) {
-                    if (in_array($key, $this->escaper->getUrlsAttributes()) && $this->escaper->isEscapeUrl()) {
-                        $replace = $this->escaper->escapeUrlParameter($replace);
-                    }
-
-                    $value = str_replace('%'.$parameter.'%', $replace, $value);
-                }
-
-                $element[$key] = $value;
-            }
+        foreach ($parameters as $parameter => $replace) {
+            $element['text'] = str_replace('%'.$parameter.'%', $replace, (string) $element['text']);
         }
 
+        $element['attr'] = $this->replaceParametersInAttributes($element['attr'], $parameters);
+
         return $element;
+    }
+
+    /**
+     * Replace parameters in attr.
+     *
+     * @param array $attributes The attributes
+     * @param array $parameters The parameters
+     *
+     * @return array
+     */
+    private function replaceParametersInAttributes(array $attributes, array $parameters)
+    {
+        foreach ($attributes as $key => $value) {
+            if (is_array($value)) {
+                $attributes[$key] = $this->replaceParametersInAttributes($value, $parameters);
+            }
+
+            foreach ($parameters as $parameter => $replace) {
+                if (in_array($key, $this->escaper->getUrlsAttributes()) && $this->escaper->isEscapeUrl()) {
+                    $replace = $this->escaper->escapeUrlParameter($replace);
+                }
+
+                $value = str_replace('%'.$parameter.'%', $replace, (string) $value);
+            }
+
+            $attributes[$key] = $value;
+        }
+
+        return $attributes;
     }
 
     /**

@@ -6,7 +6,7 @@
 
 ##Parameters
 
-EasyHtmlElement allows you to define parameters in your elements to make it dynamic. Parameters will be replace by given values. You can define parameters everywhere in an element and you do it with this syntax `%parameter%`.
+EasyHtmlElement allows you to define parameters in your elements to make it dynamic. Parameters will be replace by given values. You can define parameters in `text` and `attr` and you do it with this syntax `%parameter%`.
 
 Parameters values are the 2nd load method argument (or the 1st if you call it dynamically with the magic method `__call()`). It's an array where keys are parameters name and values are parameters values.
 
@@ -27,7 +27,7 @@ echo $htmlElement->title(array('titleText' => 'My title'));
  */
 ```
 
-####It's work everywhere
+####Text and Attributes
 
 You can define parameters wherever you want like to define a css class dynamically:
 
