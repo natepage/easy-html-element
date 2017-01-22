@@ -227,9 +227,9 @@ class HtmlElement implements HtmlElementInterface
     /**
      * Get the resolved element representation.
      *
-     * @param string $name       The current element name
-     * @param array  $parameters The parameters to replace in element
-     * @param bool   $mainCall   Determine if it's the main(first) call of the method
+     * @param string|array $name       The current element name
+     * @param array        $parameters The parameters to replace in element
+     * @param bool         $mainCall   Determine if it's the main(first) call of the method
      *
      * @return array
      */
@@ -288,7 +288,7 @@ class HtmlElement implements HtmlElementInterface
     /**
      * Get the current element representation.
      *
-     * @param string $name The element name
+     * @param string|array $name The element name
      *
      * @return array
      *
