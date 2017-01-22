@@ -181,9 +181,9 @@ class HtmlElement implements HtmlElementInterface
     /**
      * Get the element instance.
      *
-     * @param string $name       The element name
-     * @param array  $parameters The parameters to replace in element
-     * @param bool   $mainCall   Determine if it's the main(first) call of the method
+     * @param string|array $name       The element name
+     * @param array        $parameters The parameters to replace in element
+     * @param bool         $mainCall   Determine if it's the main(first) call of the method
      *
      * @return ElementInterface
      *
