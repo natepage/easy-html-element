@@ -233,7 +233,7 @@ class Element implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function setParent(?ElementInterface $parent = null): ElementInterface
+    public function setParent(ElementInterface $parent = null): ElementInterface
     {
         $this->parent = $parent;
 

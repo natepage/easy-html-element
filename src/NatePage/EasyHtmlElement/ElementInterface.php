@@ -114,7 +114,7 @@ interface ElementInterface
      *
      * @return ElementInterface
      */
-    public function setParent(?ElementInterface $parent = null): self;
+    public function setParent(ElementInterface $parent = null): self;
 
     /**
      * Get element parent.
