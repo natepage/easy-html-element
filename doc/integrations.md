@@ -27,10 +27,19 @@ class AppKernel extends Kernel
 }
 ```
 
-You can define your `map` in `app/config.yml` (or in your custom yml file as an import):
+You can define your `map` and customize default options in `app/config.yml` (or in your custom yml file as an import):
 
 ```yaml
 easy_html_element:
+    encoding:         utf-8
+    escaper:          NatePage\EasyHtmlElement\Escaper
+    branch_validator: NatePage\EasyHtmlElement\BranchValidator
+    escaping:
+        html:         true
+        html_attr:    true
+        css:          true
+        js:           true
+        url:          true
     map:
         myDiv:
             type: div

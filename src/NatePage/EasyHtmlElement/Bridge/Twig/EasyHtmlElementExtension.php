@@ -21,7 +21,7 @@ class EasyHtmlElementExtension extends \Twig_Extension
     public function getFunctions(): array
     {
         return array(
-            new \Twig_Function('htmlElement', array($this, 'load'))
+            new \Twig_Function('htmlElement', array($this, 'load'), array('is_safe' => array('html')))
         );
     }
 
