@@ -101,7 +101,7 @@ class Element implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function getType(): ?string
+    public function getType()
     {
         return $this->type;
     }
@@ -109,7 +109,7 @@ class Element implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function setType(?string $type = null): ElementInterface
+    public function setType($type = null): ElementInterface
     {
         if (null !== $type) {
             $this->type = $type;
@@ -121,7 +121,7 @@ class Element implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function getText(): ?string
+    public function getText()
     {
         return $this->text;
     }
@@ -129,7 +129,7 @@ class Element implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function setText(?string $text = null): ElementInterface
+    public function setText($text = null): ElementInterface
     {
         if (null !== $text) {
             $this->text = $text;

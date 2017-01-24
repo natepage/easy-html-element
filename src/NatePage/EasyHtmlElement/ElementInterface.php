@@ -13,14 +13,14 @@ interface ElementInterface
      *
      * @return ElementInterface
      */
-    public function setType(?string $type = null): self;
+    public function setType($type = null): self;
 
     /**
      * Get element type.
      *
      * @return null|string
      */
-    public function getType(): ?string;
+    public function getType();
 
     /**
      * Set element text.
@@ -29,14 +29,14 @@ interface ElementInterface
      *
      * @return ElementInterface
      */
-    public function setText(?string $text = null): self;
+    public function setText($text = null): self;
 
     /**
      * Get element text.
      *
      * @return null|string
      */
-    public function getText(): ?string;
+    public function getText();
 
     /**
      * Add element attribute.
