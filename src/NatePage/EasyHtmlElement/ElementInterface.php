@@ -121,7 +121,7 @@ interface ElementInterface
      *
      * @return ElementInterface|null
      */
-    public function getParent(): ?self;
+    public function getParent();
 
     /**
      * Render element.
