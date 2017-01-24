@@ -23,8 +23,8 @@ class Element implements ElementInterface
     protected $parent;
 
     public function __construct(
-        ?string $type = null,
-        ?string $text = null,
+        $type = null,
+        $text = null,
         array $attributes = array(),
         array $children = array()
     )
