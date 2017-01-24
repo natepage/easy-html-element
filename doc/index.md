@@ -15,3 +15,4 @@
 * [Parameters](parameters.md)
 * [Escaping](escaping.md)
 * [Customization](customization.md)
+* [Integrations](integrations.md)

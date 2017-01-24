@@ -18,6 +18,13 @@
         "airmanbzh/php-html-generator": "dev-master",
         "zendframework/zend-escaper": "^2.5"
     },
+    "require-dev": {
+        "twig/twig": "~2.0",
+        "symfony/config": "~3.0",
+        "symfony/dependency-injection": "~3.0",
+        "symfony/http-kernel": "~3.0",
+        "laravel/framework": "^5.3"
+    },
     "autoload": {
         "psr-4": { "NatePage\\EasyHtmlElement\\": "src/NatePage/EasyHtmlElement/" }
     },

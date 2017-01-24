@@ -1,0 +1,5 @@
+<?php
+
+return [
+    'map' => array()
+];

@@ -138,6 +138,15 @@ Here we have:
 
 A complex and dynamic html structure in just on method, that's what EasyHtmlElement promised you!
 
+##Integrations
+EasyHtmlElement provides integrations for:
+
+* Symfony
+* Twig
+* Laravel
+
+More informations from [integrations](doc/integrations.md).
+
 ##Documentation
 Does it make you want to learn more about the EasyHtmlElement power?
 
