@@ -89,7 +89,7 @@ class HtmlElement implements HtmlElementInterface
     /**
      * {@inheritdoc}
      */
-    public function getMap()
+    public function getMap(): array
     {
         return $this->map;
     }
@@ -97,7 +97,7 @@ class HtmlElement implements HtmlElementInterface
     /**
      * {@inheritdoc}
      */
-    public function setMap(array $map)
+    public function setMap(array $map): HtmlElementInterface
     {
         $this->map = $map;
 
@@ -107,7 +107,7 @@ class HtmlElement implements HtmlElementInterface
     /**
      * {@inheritdoc}
      */
-    public function addManyToMap(array $elements)
+    public function addManyToMap(array $elements): HtmlElementInterface
     {
         foreach ($elements as $name => $element) {
             $this->addOneToMap($name, $element);
@@ -119,7 +119,7 @@ class HtmlElement implements HtmlElementInterface
     /**
      * {@inheritdoc}
      */
-    public function addOneToMap($name, array $element)
+    public function addOneToMap(string $name, array $element): HtmlElementInterface
     {
         $this->map[$name] = $element;
 
@@ -129,7 +129,7 @@ class HtmlElement implements HtmlElementInterface
     /**
      * {@inheritdoc}
      */
-    public function getBranchValidator()
+    public function getBranchValidator(): BranchValidatorInterface
     {
         return $this->branchValidator;
     }
@@ -137,7 +137,7 @@ class HtmlElement implements HtmlElementInterface
     /**
      * {@inheritdoc}
      */
-    public function setBranchValidator(BranchValidatorInterface $branchValidator)
+    public function setBranchValidator(BranchValidatorInterface $branchValidator): HtmlElementInterface
     {
         $this->branchValidator = $branchValidator;
 
@@ -147,7 +147,7 @@ class HtmlElement implements HtmlElementInterface
     /**
      * {@inheritdoc}
      */
-    public function getEscaper()
+    public function getEscaper(): EscaperInterface
     {
         return $this->escaper;
     }
@@ -155,7 +155,7 @@ class HtmlElement implements HtmlElementInterface
     /**
      * {@inheritdoc}
      */
-    public function setEscaper(EscaperInterface $escaper)
+    public function setEscaper(EscaperInterface $escaper): HtmlElementInterface
     {
         $this->escaper = $escaper;
 
@@ -165,7 +165,12 @@ class HtmlElement implements HtmlElementInterface
     /**
      * {@inheritdoc}
      */
-    public function load($name, array $parameters = array(), array $attributes = array(), array $children = array())
+    public function load(
+        $name,
+        array $parameters = array(),
+        array $attributes = array(),
+        array $children = array()
+    ): ElementInterface
     {
         $element = $this->getInstance($name, $parameters, true);
 
@@ -189,7 +194,7 @@ class HtmlElement implements HtmlElementInterface
      *
      * @throws InvalidElementException If the current instance doesn't implement ElementInterface
      */
-    private function getInstance($name, array $parameters, $mainCall = false)
+    private function getInstance($name, array $parameters, bool $mainCall = false): ElementInterface
     {
         $element = $this->resolveElement($name, $parameters, $mainCall);
 
@@ -233,7 +238,7 @@ class HtmlElement implements HtmlElementInterface
      *
      * @return array
      */
-    private function resolveElement($name, array $parameters, $mainCall = false)
+    private function resolveElement($name, array $parameters, bool $mainCall = false): array
     {
         $current = $this->getCurrentElement($name);
 
@@ -272,7 +277,7 @@ class HtmlElement implements HtmlElementInterface
      *
      * @return bool
      */
-    private function alreadyResolved($name)
+    private function alreadyResolved(string $name): bool
     {
         return array_key_exists($name, $this->resolved);
     }
@@ -280,7 +285,7 @@ class HtmlElement implements HtmlElementInterface
     /**
      * {@inheritdoc}
      */
-    public function exists($name)
+    public function exists(string $name): bool
     {
         return array_key_exists(lcfirst($name), $this->map);
     }
@@ -295,7 +300,7 @@ class HtmlElement implements HtmlElementInterface
      * @throws InvalidElementException   If the current element is defined dynamically and doesn't define a name
      * @throws UndefinedElementException If the current element doesn't exist
      */
-    public function getCurrentElement($name)
+    public function getCurrentElement($name): array
     {
         if (is_array($name)) {
             if (!isset($name['name'])) {
@@ -325,7 +330,7 @@ class HtmlElement implements HtmlElementInterface
      *
      * @return array
      */
-    private function replaceParameters(array $element, array $parameters)
+    private function replaceParameters(array $element, array $parameters): array
     {
         foreach ($parameters as $parameter => $replace) {
             $element['text'] = str_replace('%'.$parameter.'%', $replace, (string) $element['text']);
@@ -344,7 +349,7 @@ class HtmlElement implements HtmlElementInterface
      *
      * @return array
      */
-    private function replaceParametersInAttributes(array $attributes, array $parameters)
+    private function replaceParametersInAttributes(array $attributes, array $parameters): array
     {
         foreach ($attributes as $key => $value) {
             if (is_array($value)) {
@@ -373,7 +378,7 @@ class HtmlElement implements HtmlElementInterface
      *
      * @return array
      */
-    private function extendElement($extend, $current)
+    private function extendElement(array $extend, array $current): array
     {
         foreach ($this->defaults as $default => $value) {
             if (!in_array($default, array('attr', 'children')) && $current[$default] === $value) {
@@ -398,7 +403,7 @@ class HtmlElement implements HtmlElementInterface
      *
      * @return array
      */
-    private function extendAttributes(array $from, array $to)
+    private function extendAttributes(array $from, array $to): array
     {
         foreach ($from as $key => $value) {
             if (in_array($key, $this->mergeableAttributes) && isset($to[$key])) {
@@ -422,7 +427,7 @@ class HtmlElement implements HtmlElementInterface
      *
      * @return string
      */
-    private function extendMergeableAttributes($from, $to, $attr)
+    private function extendMergeableAttributes($from, $to, string $attr): string
     {
         $value = array_merge((array) $to, (array) $from);
 

@@ -245,22 +245,22 @@ class HtmlElementTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($firstDiv . $secondDiv, $this->renderMultipleDivWithParameters());
     }
 
-    private function renderDiv()
+    private function renderDiv(): string
     {
         return sprintf('<div>%s</div>', $this->textInDiv);
     }
 
-    private function renderDivWithAttribute()
+    private function renderDivWithAttribute(): string
     {
         return sprintf('<div %s="value">%s</div>', $this->divAttr, $this->textInDiv);
     }
 
-    private function renderDivWithChild()
+    private function renderDivWithChild(): string
     {
         return sprintf('<div><span>%s</span></div>', $this->textInSpan);
     }
 
-    private function renderDivWithAttributeAndChildren()
+    private function renderDivWithAttributeAndChildren(): string
     {
         return sprintf('<div %s="value"><h1 %s="value">%s</h1><span %s="value">%s</span></div>',
             $this->divAttr,
@@ -271,7 +271,7 @@ class HtmlElementTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    private function renderMultipleDivWithParameters()
+    private function renderMultipleDivWithParameters(): string
     {
         return '<div>My first div</div><div>My second div</div>';
     }

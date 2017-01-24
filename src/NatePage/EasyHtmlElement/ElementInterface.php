@@ -13,14 +13,14 @@ interface ElementInterface
      *
      * @return ElementInterface
      */
-    public function setType($type = null);
+    public function setType(?string $type = null): self;
 
     /**
      * Get element type.
      *
      * @return null|string
      */
-    public function getType();
+    public function getType(): ?string;
 
     /**
      * Set element text.
@@ -29,14 +29,14 @@ interface ElementInterface
      *
      * @return ElementInterface
      */
-    public function setText($text = null);
+    public function setText(?string $text = null): self;
 
     /**
      * Get element text.
      *
      * @return null|string
      */
-    public function getText();
+    public function getText(): ?string;
 
     /**
      * Add element attribute.
@@ -46,7 +46,7 @@ interface ElementInterface
      *
      * @return ElementInterface
      */
-    public function addAttribute($key, $value);
+    public function addAttribute($key, $value): self;
 
     /**
      * Add element attributes.
@@ -55,7 +55,7 @@ interface ElementInterface
      *
      * @return ElementInterface
      */
-    public function addAttributes(array $attributes);
+    public function addAttributes(array $attributes): self;
 
     /**
      * Set element attributes.
@@ -64,14 +64,14 @@ interface ElementInterface
      *
      * @return ElementInterface
      */
-    public function setAttributes(array $attributes = array());
+    public function setAttributes(array $attributes = array()): self;
 
     /**
      * Get attributes.
      *
      * @return array
      */
-    public function getAttributes();
+    public function getAttributes(): array;
 
     /**
      * Add element child.
@@ -80,7 +80,7 @@ interface ElementInterface
      *
      * @return ElementInterface
      */
-    public function addChild(ElementInterface $child);
+    public function addChild(ElementInterface $child): self;
 
     /**
      * Add element children.
@@ -89,7 +89,7 @@ interface ElementInterface
      *
      * @return ElementInterface
      */
-    public function addChildren(array $children);
+    public function addChildren(array $children): self;
 
     /**
      * Set element children.
@@ -98,14 +98,14 @@ interface ElementInterface
      *
      * @return ElementInterface
      */
-    public function setChildren(array $children = array());
+    public function setChildren(array $children = array()): self;
 
     /**
      * Get element children.
      *
      * @return array
      */
-    public function getChildren();
+    public function getChildren(): array;
 
     /**
      * Set element parent.
@@ -114,14 +114,14 @@ interface ElementInterface
      *
      * @return ElementInterface
      */
-    public function setParent(ElementInterface $parent = null);
+    public function setParent(?ElementInterface $parent = null): self;
 
     /**
      * Get element parent.
      *
      * @return ElementInterface|null
      */
-    public function getParent();
+    public function getParent(): ?self;
 
     /**
      * Render element.
@@ -130,19 +130,19 @@ interface ElementInterface
      *
      * @return Markup
      */
-    public function render(Markup $root = null);
+    public function render(Markup $root = null) :Markup;
 
     /**
      * Render the all parents structure.
      *
      * @return Markup
      */
-    public function renderRoot();
+    public function renderRoot() :Markup;
 
     /**
      * Get the string representation.
      *
      * @return string
      */
-    public function __toString();
+    public function __toString(): string;
 }

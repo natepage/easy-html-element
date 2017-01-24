@@ -30,7 +30,7 @@ class Escaper extends BaseEscaper implements EscaperInterface
     /**
      * {@inheritdoc}
      */
-    public function escapeAttributes(array $attributes)
+    public function escapeAttributes(array $attributes): array
     {
         if ($this->escapeHtmlAttr || $this->escapeUrl) {
             foreach ($attributes as $attr => $value) {
@@ -52,7 +52,7 @@ class Escaper extends BaseEscaper implements EscaperInterface
     /**
      * {@inheritdoc}
      */
-    public function escape(ElementInterface $element)
+    public function escape(ElementInterface $element): ElementInterface
     {
         if ($this->escapeHtml && !in_array($element->getType(), $this->specialEscapingTypes)) {
             $element->setText($this->escapeHtml($element->getText()));
@@ -74,7 +74,7 @@ class Escaper extends BaseEscaper implements EscaperInterface
     /**
      * {@inheritdoc}
      */
-    public function escapeUrlParameter($parameter)
+    public function escapeUrlParameter(string $parameter): string
     {
         return $this->escapeUrl($parameter);
     }
@@ -82,7 +82,7 @@ class Escaper extends BaseEscaper implements EscaperInterface
     /**
      * {@inheritdoc}
      */
-    public function isEscapeHtml()
+    public function isEscapeHtml(): bool
     {
         return $this->escapeHtml;
     }
@@ -90,7 +90,7 @@ class Escaper extends BaseEscaper implements EscaperInterface
     /**
      * {@inheritdoc}
      */
-    public function setEscapeHtml($escapeHtml = true)
+    public function setEscapeHtml(bool $escapeHtml = true): EscaperInterface
     {
         $this->escapeHtml = $escapeHtml;
 
@@ -100,7 +100,7 @@ class Escaper extends BaseEscaper implements EscaperInterface
     /**
      * {@inheritdoc}
      */
-    public function isEscapeHtmlAttr()
+    public function isEscapeHtmlAttr(): bool
     {
         return $this->escapeHtmlAttr;
     }
@@ -108,7 +108,7 @@ class Escaper extends BaseEscaper implements EscaperInterface
     /**
      * {@inheritdoc}
      */
-    public function setEscapeHtmlAttr($escapeHtmlAttr = true)
+    public function setEscapeHtmlAttr(bool $escapeHtmlAttr = true): EscaperInterface
     {
         $this->escapeHtmlAttr = $escapeHtmlAttr;
 
@@ -118,7 +118,7 @@ class Escaper extends BaseEscaper implements EscaperInterface
     /**
      * {@inheritdoc}
      */
-    public function isEscapeJs()
+    public function isEscapeJs(): bool
     {
         return $this->escapeJs;
     }
@@ -126,7 +126,7 @@ class Escaper extends BaseEscaper implements EscaperInterface
     /**
      * {@inheritdoc}
      */
-    public function setEscapeJs($escapeJs = true)
+    public function setEscapeJs(bool $escapeJs = true): EscaperInterface
     {
         $this->escapeJs = $escapeJs;
 
@@ -136,7 +136,7 @@ class Escaper extends BaseEscaper implements EscaperInterface
     /**
      * {@inheritdoc}
      */
-    public function isEscapeCss()
+    public function isEscapeCss(): bool
     {
         return $this->escapeCss;
     }
@@ -144,7 +144,7 @@ class Escaper extends BaseEscaper implements EscaperInterface
     /**
      * {@inheritdoc}
      */
-    public function setEscapeCss($escapeCss = true)
+    public function setEscapeCss(bool $escapeCss = true): EscaperInterface
     {
         $this->escapeCss = $escapeCss;
 
@@ -154,7 +154,7 @@ class Escaper extends BaseEscaper implements EscaperInterface
     /**
      * {@inheritdoc}
      */
-    public function isEscapeUrl()
+    public function isEscapeUrl(): bool
     {
         return $this->escapeUrl;
     }
@@ -162,7 +162,7 @@ class Escaper extends BaseEscaper implements EscaperInterface
     /**
      * {@inheritdoc}
      */
-    public function setEscapeUrl($escapeUrl = true)
+    public function setEscapeUrl(bool $escapeUrl = true): EscaperInterface
     {
         $this->escapeUrl = $escapeUrl;
 
@@ -172,7 +172,7 @@ class Escaper extends BaseEscaper implements EscaperInterface
     /**
      * {@inheritdoc}
      */
-    public function getUrlsAttributes()
+    public function getUrlsAttributes(): array
     {
         return $this->urlsAttributes;
     }

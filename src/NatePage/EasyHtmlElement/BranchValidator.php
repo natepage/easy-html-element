@@ -18,10 +18,7 @@ class BranchValidator implements BranchValidatorInterface
     }
 
     /**
-     * Valid the current map branch.
-     *
-     * @param string $name     The current element name
-     * @param array  $circular The array of elements names called in the current branch of map
+     * {@inheritdoc}
      */
     public function validateBranch($name, array $circular = array())
     {
@@ -71,7 +68,7 @@ class BranchValidator implements BranchValidatorInterface
      *
      * @throws InvalidElementException If the current element defines himself as parent, children or extends
      */
-    private function validateDefineHimself($name, array $currentCheck, $check)
+    private function validateDefineHimself(string $name, array $currentCheck, string $check)
     {
         if (in_array($name, $currentCheck)) {
             throw new InvalidElementException(sprintf(
@@ -93,7 +90,7 @@ class BranchValidator implements BranchValidatorInterface
      * @throws InvalidElementException If the current element defines a parent, child or extends which creates circular
      *                                 reference
      */
-    private function validateCircularReferences($name, $currentCheck, $check, array $circular)
+    private function validateCircularReferences(string $name, $currentCheck, string $check, array $circular)
     {
         if (!is_array($currentCheck) && in_array($currentCheck, $circular)) {
             $circular[] = $currentCheck;

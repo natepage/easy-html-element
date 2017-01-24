@@ -7,10 +7,10 @@ use HtmlGenerator\Markup;
 
 class Element implements ElementInterface
 {
-    /** @var string */
+    /** @var string|null */
     protected $type;
 
-    /** @var string */
+    /** @var string|null */
     protected $text;
 
     /** @var array */
@@ -22,7 +22,12 @@ class Element implements ElementInterface
     /** @var ElementInterface */
     protected $parent;
 
-    public function __construct($type = null, $text = null, array $attributes = array(), array $children = array())
+    public function __construct(
+        ?string $type = null,
+        ?string $text = null,
+        array $attributes = array(),
+        array $children = array()
+    )
     {
         $this->setType($type);
         $this->setText($text);
@@ -31,7 +36,7 @@ class Element implements ElementInterface
         $this->attributes = $attributes;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->renderRoot();
     }
@@ -39,7 +44,7 @@ class Element implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function renderRoot()
+    public function renderRoot(): Markup
     {
         return null !== $this->parent ? $this->parent->renderRoot() : $this->render();
     }
@@ -47,7 +52,7 @@ class Element implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function render(Markup $root = null)
+    public function render(Markup $root = null): Markup
     {
         $type = $this->type;
         $attributes = $this->attributes;
@@ -96,7 +101,7 @@ class Element implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function getType()
+    public function getType(): ?string
     {
         return $this->type;
     }
@@ -104,7 +109,7 @@ class Element implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function setType($type = null)
+    public function setType(?string $type = null): ElementInterface
     {
         if (null !== $type) {
             $this->type = $type;
@@ -116,7 +121,7 @@ class Element implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function getText()
+    public function getText(): ?string
     {
         return $this->text;
     }
@@ -124,7 +129,7 @@ class Element implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function setText($text = null)
+    public function setText(?string $text = null): ElementInterface
     {
         if (null !== $text) {
             $this->text = $text;
@@ -136,7 +141,7 @@ class Element implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function addAttributes(array $attributes)
+    public function addAttributes(array $attributes): ElementInterface
     {
         foreach ($attributes as $key => $value) {
             $this->addAttribute($key, $value);
@@ -148,7 +153,7 @@ class Element implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function addAttribute($key, $value)
+    public function addAttribute($key, $value): ElementInterface
     {
         $this->attributes[$key] = $value;
 
@@ -158,7 +163,7 @@ class Element implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
@@ -166,7 +171,7 @@ class Element implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function setAttributes(array $attributes = array())
+    public function setAttributes(array $attributes = array()): ElementInterface
     {
         $this->attributes = $attributes;
 
@@ -176,7 +181,7 @@ class Element implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function addChildren(array $children)
+    public function addChildren(array $children): ElementInterface
     {
         foreach ($children as $child) {
             $this->addChild($child);
@@ -188,7 +193,7 @@ class Element implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function addChild(ElementInterface $child)
+    public function addChild(ElementInterface $child): ElementInterface
     {
         $this->children[] = $child;
 
@@ -200,7 +205,7 @@ class Element implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function getChildren()
+    public function getChildren(): array
     {
         return $this->children;
     }
@@ -208,7 +213,7 @@ class Element implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function setChildren(array $children = array())
+    public function setChildren(array $children = array()): ElementInterface
     {
         $this->children = array();
 
@@ -220,7 +225,7 @@ class Element implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParent(): ElementInterface
     {
         return $this->parent;
     }
@@ -228,7 +233,7 @@ class Element implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function setParent(ElementInterface $parent = null)
+    public function setParent(?ElementInterface $parent = null): ElementInterface
     {
         $this->parent = $parent;
 

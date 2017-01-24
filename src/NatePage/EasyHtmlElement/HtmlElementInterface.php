@@ -10,14 +10,19 @@ interface HtmlElementInterface
     /**
      * Load a html element.
      *
-     * @param string $name       The element name
-     * @param array  $parameters The element parameters
-     * @param array  $attributes The element attributes
-     * @param array  $children   The element children
+     * @param string|array $name       The element name
+     * @param array        $parameters The element parameters
+     * @param array        $attributes The element attributes
+     * @param array        $children   The element children
      *
      * @return ElementInterface
      */
-    public function load($name, array $parameters = array(), array $attributes = array(), array $children = array());
+    public function load(
+        $name,
+        array $parameters = array(),
+        array $attributes = array(),
+        array $children = array()
+    ): ElementInterface;
 
     /**
      * Check if an element exits.
@@ -26,7 +31,7 @@ interface HtmlElementInterface
      *
      * @return bool
      */
-    public function exists($name);
+    public function exists(string $name): bool;
 
     /**
      * Set the elements map.
@@ -35,14 +40,14 @@ interface HtmlElementInterface
      *
      * @return HtmlElementInterface
      */
-    public function setMap(array $map);
+    public function setMap(array $map): self;
 
     /**
      * Get the elements map.
      *
      * @return array
      */
-    public function getMap();
+    public function getMap(): array;
 
     /**
      * Add one element to the map.
@@ -52,7 +57,7 @@ interface HtmlElementInterface
      *
      * @return HtmlElementInterface
      */
-    public function addOneToMap($name, array $element);
+    public function addOneToMap(string $name, array $element): self;
 
     /**
      * Add many elements to the map.
@@ -61,7 +66,7 @@ interface HtmlElementInterface
      *
      * @return HtmlElementInterface
      */
-    public function addManyToMap(array $elements);
+    public function addManyToMap(array $elements): self;
 
     /**
      * Set the HtmlElement branch validator.
@@ -70,14 +75,14 @@ interface HtmlElementInterface
      *
      * @return HtmlElementInterface
      */
-    public function setBranchValidator(BranchValidatorInterface $branchValidator);
+    public function setBranchValidator(BranchValidatorInterface $branchValidator): self;
 
     /**
      * Get the HtmlElement branch validator.
      *
      * @return BranchValidatorInterface
      */
-    public function getBranchValidator();
+    public function getBranchValidator(): BranchValidatorInterface;
 
     /**
      * Set the HtmlElement escaper.
@@ -86,24 +91,24 @@ interface HtmlElementInterface
      *
      * @return HtmlElementInterface
      */
-    public function setEscaper(EscaperInterface $escaper);
+    public function setEscaper(EscaperInterface $escaper): self;
 
     /**
      * Get the HtmlElement escaper.
      *
      * @return EscaperInterface
      */
-    public function getEscaper();
+    public function getEscaper(): EscaperInterface;
 
     /**
      * Get the current element representation.
      *
-     * @param string $name The element name
+     * @param string|array $name The element name
      *
      * @return array
      *
      * @throws InvalidElementException   If the current element is defined dynamically and doesn't define a name
      * @throws UndefinedElementException If the current element doesn't exist
      */
-    public function getCurrentElement($name);
+    public function getCurrentElement($name): array;
 }
