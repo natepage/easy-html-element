@@ -38,7 +38,7 @@ class EasyHtmlElementExtension extends Extension
      */
     private function registerHtmlElement(array $config, ContainerBuilder $container)
     {
-        $htmlElementDef = new Definition(HtmlElement::class, array($config['map'], null, null, $config['encoding']));
+        $htmlElementDef = new Definition(HtmlElement::class, array($config['map']));
 
         $htmlElementDef
             ->addMethodCall('setEscaper', array(new Reference(self::ESCAPER_NAME)))
@@ -56,7 +56,7 @@ class EasyHtmlElementExtension extends Extension
      */
     private function registerEscaper(array $config, ContainerBuilder $container)
     {
-        $escaperDef = new Definition($config['escaper']);
+        $escaperDef = new Definition($config['escaper'], array($config['encoding']));
 
         $escaperDef
             ->addMethodCall('setEscapeHtml', array($config['escaping']['html']))
