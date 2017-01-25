@@ -46,6 +46,8 @@ easy_html_element:
             text: My div with Symfony
 ```
 
+To define yours parameters in the Symfony configuration you have to double the `%` like `%%parameter%%`, it's to avoid Symfony parameters system.
+
 You can use the `easy_html_element` service in your controller:
 
 ```php

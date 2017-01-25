@@ -15,7 +15,7 @@
     ],
     "require": {
         "php": "^7.0",
-        "airmanbzh/php-html-generator": "dev-master",
+        "airmanbzh/php-html-generator": "^1.0",
         "zendframework/zend-escaper": "^2.5"
     },
     "require-dev": {
