@@ -177,7 +177,7 @@ class HtmlElement implements HtmlElementInterface
         $element->addAttributes($this->escaper->escapeAttributes($attributes));
 
         foreach ($children as $child) {
-            $element->addChild($this->escaper->escape($child));
+            $element->addChild($this->escaper->escape($child->getRoot()));
         }
 
         return $element;

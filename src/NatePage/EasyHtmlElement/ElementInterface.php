@@ -133,6 +133,13 @@ interface ElementInterface
     public function render(Markup $root = null) :Markup;
 
     /**
+     * Get the root element.
+     *
+     * @return ElementInterface
+     */
+    public function getRoot() :self;
+
+    /**
      * Render the all parents structure.
      *
      * @return Markup

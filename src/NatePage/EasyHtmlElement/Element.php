@@ -195,6 +195,8 @@ class Element implements ElementInterface
      */
     public function addChild(ElementInterface $child): ElementInterface
     {
+        $child = $child->getRoot();
+
         $this->children[] = $child;
 
         $child->setParent($this);
