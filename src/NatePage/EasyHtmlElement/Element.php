@@ -46,7 +46,7 @@ class Element implements ElementInterface
     /**
      * Use this method to customize element comportment.
      */
-    public function init(){}
+    protected function init(){}
 
     /**
      * {@inheritdoc}
