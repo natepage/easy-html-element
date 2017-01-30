@@ -178,6 +178,14 @@ class Element implements ElementInterface
     /**
      * {@inheritdoc}
      */
+    public function getAttribute(string $key)
+    {
+        return isset($this->attributes[$key]) ? $this->attributes[$key] : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getAttributes(): array
     {
         return $this->attributes;

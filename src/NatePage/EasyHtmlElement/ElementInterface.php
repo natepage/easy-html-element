@@ -67,7 +67,16 @@ interface ElementInterface
     public function setAttributes(array $attributes = array()): self;
 
     /**
-     * Get attributes.
+     * Get element attribute.
+     *
+     * @param string $key The attribute key
+     *
+     * @return mixed
+     */
+    public function getAttribute(string $key);
+
+    /**
+     * Get element attributes.
      *
      * @return array
      */
