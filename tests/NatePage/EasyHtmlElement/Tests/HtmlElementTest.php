@@ -205,7 +205,7 @@ class HtmlElementTest extends \PHPUnit_Framework_TestCase
 
         $htmlElement = new HtmlElement($map);
 
-        $this->assertEquals($htmlElement->load('myDiv', array('myDivText' => $this->textInDiv)), $this->renderDiv());
+        $this->assertEquals($htmlElement->load('myDiv', null, array(), array('myDivText' => $this->textInDiv)), $this->renderDiv());
     }
 
     public function testMapDivWithExtend()
@@ -239,8 +239,8 @@ class HtmlElementTest extends \PHPUnit_Framework_TestCase
 
         $htmlElement = new HtmlElement($map);
 
-        $firstDiv = $htmlElement->load('div', array('text' => 'My first div'));
-        $secondDiv = $htmlElement->load('div', array('text' => 'My second div'));
+        $firstDiv = $htmlElement->load('div', null, array(), array('text' => 'My first div'));
+        $secondDiv = $htmlElement->load('div', null, array(), array('text' => 'My second div'));
 
         $this->assertEquals($firstDiv . $secondDiv, $this->renderMultipleDivWithParameters());
     }

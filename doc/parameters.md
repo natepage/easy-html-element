@@ -20,7 +20,7 @@ $map = array(
 
 $htmlElement = new NatePage\EasyHtmlElement\HtmlElement($map);
 
-echo $htmlElement->title(array('titleText' => 'My title'));
+echo $htmlElement->title(null, array(), array('titleText' => 'My title'));
 
 /**
  * <h1>My title</h1>
@@ -44,7 +44,7 @@ $map = array(
 
 $htmlElement = new NatePage\EasyHtmlElement\HtmlElement($map);
 
-echo $htmlElement->title(array('titleText' => 'My title', 'titleClass' => 'success'));
+echo $htmlElement->title(null, array(), array('titleText' => 'My title', 'titleClass' => 'success'));
 
 /**
  * <h1 class="title title-success">My title</h1>

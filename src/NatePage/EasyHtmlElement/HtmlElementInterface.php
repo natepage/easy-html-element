@@ -11,16 +11,20 @@ interface HtmlElementInterface
      * Load a html element.
      *
      * @param string|array $name       The element name
-     * @param array        $parameters The element parameters
+     * @param string|null  $text       The element text
      * @param array        $attributes The element attributes
+     * @param array        $parameters The element parameters
+     * @param array        $extras     The element extras
      * @param array        $children   The element children
      *
      * @return ElementInterface
      */
     public function load(
         $name,
-        array $parameters = array(),
+        $text = null,
         array $attributes = array(),
+        array $parameters = array(),
+        array $extras = array(),
         array $children = array()
     ): ElementInterface;
 

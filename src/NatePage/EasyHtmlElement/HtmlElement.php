@@ -58,9 +58,11 @@ class HtmlElement implements HtmlElementInterface
      *
      * @param string $name      The element name
      * @param array  $arguments The arguments array to set:
-     *                          [0] = parameters (array)
+     *                          [0] = text (string|null)
      *                          [1] = attributes (array)
-     *                          [2] = children (array)
+     *                          [2] = parameters (array)
+     *                          [3] = extras (array)
+     *                          [4] = children (array)
      *
      * @return ElementInterface
      *
@@ -68,22 +70,9 @@ class HtmlElement implements HtmlElementInterface
      */
     public function __call($name, $arguments)
     {
-        switch (count($arguments)) {
-            case 0:
-                return $this->load($name);
-            case 1:
-                return $this->load($name, $arguments[0]);
-            case 2:
-                return $this->load($name, $arguments[0], $arguments[1]);
-            case 3:
-                return $this->load($name, $arguments[0], $arguments[1], $arguments[2]);
-            default:
-                throw new InvalidArgumentsNumberException(sprintf(
-                    'Maximum numbers of arguments is %d, [%d] given.',
-                    3,
-                    count($arguments)
-                ));
-        }
+        array_unshift($arguments, $name);
+
+        return $this->load(...$arguments);
     }
 
     /**
@@ -167,12 +156,14 @@ class HtmlElement implements HtmlElementInterface
      */
     public function load(
         $name,
-        array $parameters = array(),
+        $text = null,
         array $attributes = array(),
+        array $parameters = array(),
+        array $extras = array(),
         array $children = array()
     ): ElementInterface
     {
-        $element = $this->getInstance($name, $parameters, true);
+        $element = $this->getInstance($name, $text, $extras, $parameters, true);
 
         $element->addAttributes($this->escaper->escapeAttributes($attributes));
 
@@ -187,6 +178,8 @@ class HtmlElement implements HtmlElementInterface
      * Get the element instance.
      *
      * @param string|array $name       The element name
+     * @param string|null  $text       The element text
+     * @param array        $extras     The element extras
      * @param array        $parameters The parameters to replace in element
      * @param bool         $mainCall   Determine if it's the main(first) call of the method
      *
@@ -194,16 +187,26 @@ class HtmlElement implements HtmlElementInterface
      *
      * @throws InvalidElementException If the current instance doesn't implement ElementInterface
      */
-    private function getInstance($name, array $parameters, bool $mainCall = false): ElementInterface
+    private function getInstance(
+        $name, $text,
+        array $extras,
+        array $parameters,
+        bool $mainCall = false
+    ): ElementInterface
     {
         $element = $this->resolveElement($name, $parameters, $mainCall);
 
         $class = $element['class'];
         $type = $element['type'];
-        $text = $element['text'];
+        $text = $text !== null ? $text : $element['text'];
         $attributes = $element['attr'];
 
-        $instance = new $class($type, $text, $attributes);
+        $children = array();
+        foreach ((array) $element['children'] as $child) {
+            $children[] = $this->getInstance($child, null, array(), $parameters);
+        }
+
+        $instance = new $class($type, $text, $attributes, $extras, $children);
 
         if (!$instance instanceof ElementInterface) {
             throw new InvalidElementException(sprintf(
@@ -213,17 +216,10 @@ class HtmlElement implements HtmlElementInterface
             ));
         }
 
-        $children = array();
-        foreach ((array) $element['children'] as $child) {
-            $children[] = $this->getInstance($child, $parameters);
-        }
-
-        $instance->setChildren($children);
-
         if (null !== $element['parent']) {
-            $parent = $this->getInstance($element['parent'], $parameters);
+            $parent = $this->getInstance($element['parent'], null, array(), $parameters);
 
-            $parent->addChild($instance);
+            $parent->addChild($instance->getRoot());
         }
 
         return $this->escaper->escape($instance);

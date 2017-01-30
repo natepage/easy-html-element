@@ -17,6 +17,9 @@ class Element implements ElementInterface
     protected $attributes;
 
     /** @var array */
+    protected $extras;
+
+    /** @var array */
     protected $children;
 
     /** @var ElementInterface */
@@ -26,6 +29,7 @@ class Element implements ElementInterface
         $type = null,
         $text = null,
         array $attributes = array(),
+        array $extras = array(),
         array $children = array()
     )
     {
@@ -34,8 +38,19 @@ class Element implements ElementInterface
         $this->setChildren($children);
 
         $this->attributes = $attributes;
+        $this->extras = $extras;
+
+        $this->init();
     }
 
+    /**
+     * Use this method to customize element comportment.
+     */
+    public function init(){}
+
+    /**
+     * {@inheritdoc}
+     */
     public function __toString(): string
     {
         return (string) $this->renderRoot();
@@ -46,7 +61,7 @@ class Element implements ElementInterface
      */
     public function renderRoot(): Markup
     {
-        return null !== $this->parent ? $this->parent->renderRoot() : $this->render();
+        return $this->getRoot()->render();
     }
 
     /**
@@ -240,5 +255,13 @@ class Element implements ElementInterface
         $this->parent = $parent;
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRoot(): ElementInterface
+    {
+        return null !== $this->parent ? $this->parent->getRoot() : $this;
     }
 }

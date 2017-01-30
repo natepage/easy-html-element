@@ -106,7 +106,7 @@ $map = array(
 );
 
 $htmlElement = new \NatePage\EasyHtmlElement\HtmlElement($map);
-$panelPrimary = $htmlElement->load('panelPrimary', array(
+$panelPrimary = $htmlElement->load('panelPrimary', null, array(), array(
     'panel_title' => 'My Panel Title',
     'panel_body' => 'My Panel Body',
     'panel_footer' => 'My Panel Footer'

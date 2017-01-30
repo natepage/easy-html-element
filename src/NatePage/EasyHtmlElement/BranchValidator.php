@@ -9,8 +9,15 @@ class BranchValidator implements BranchValidatorInterface
     /** @var HtmlElementInterface */
     private $htmlElement;
 
-    /** @var array The options to check to valid a branch */
-    private $checks = array('parent', 'extends', 'children');
+    /**
+     * @var array The options to check to valid a branch. The bool determine if the option can
+     *            define more than one value. True = unique value, False = multiple values
+     */
+    private $checks = array(
+        'parent' => true,
+        'extends' => false,
+        'children' => false
+    );
 
     public function __construct(HtmlElementInterface $htmlElement)
     {
@@ -28,15 +35,18 @@ class BranchValidator implements BranchValidatorInterface
 
         $this->validateClass($current);
 
-        foreach ($this->checks as $check) {
+        foreach ($this->checks as $check => $unique) {
             if (isset($current[$check])) {
-                $currentCheck = (array) $current[$check];
+                $this->validateDefineHimself($current['name'], $current[$check], $check);
 
-                $this->validateDefineHimself($current['name'], $currentCheck, $check);
-
-                foreach ($currentCheck as $cc) {
-                    $this->validateCircularReferences($current['name'], $cc, $check, $circular);
-                    $this->validateBranch($cc, $circular);
+                if ($unique) {
+                    $this->validateCircularReferences($current['name'], $current[$check], $check, $circular);
+                    $this->validateBranch($current[$check], $circular);
+                } else {
+                    foreach ((array) $current[$check] as $cc) {
+                        $this->validateCircularReferences($current['name'], $cc, $check, $circular);
+                        $this->validateBranch($cc, $circular);
+                    }
                 }
             }
         }
@@ -68,9 +78,9 @@ class BranchValidator implements BranchValidatorInterface
      *
      * @throws InvalidElementException If the current element defines himself as parent, children or extends
      */
-    private function validateDefineHimself(string $name, array $currentCheck, string $check)
+    private function validateDefineHimself(string $name, $currentCheck, string $check)
     {
-        if (in_array($name, $currentCheck)) {
+        if (in_array($name, (array) $currentCheck)) {
             throw new InvalidElementException(sprintf(
                 'Element "%s" cannot define himself as %s.',
                 $name,
