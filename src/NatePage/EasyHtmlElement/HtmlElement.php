@@ -163,9 +163,7 @@ class HtmlElement implements HtmlElementInterface
         array $children = array()
     ): ElementInterface
     {
-        $element = $this->getInstance($name, $text, $extras, $parameters, true);
-
-        $element->addAttributes($this->escaper->escapeAttributes($attributes));
+        $element = $this->getInstance($name, $text, $attributes, $extras, $parameters, true);
 
         foreach ($children as $child) {
             $element->addChild($this->escaper->escape($child->getRoot()));
@@ -179,6 +177,7 @@ class HtmlElement implements HtmlElementInterface
      *
      * @param string|array $name       The element name
      * @param string|null  $text       The element text
+     * @param array        $attributes The element attributes
      * @param array        $extras     The element extras
      * @param array        $parameters The parameters to replace in element
      * @param bool         $mainCall   Determine if it's the main(first) call of the method
@@ -188,7 +187,9 @@ class HtmlElement implements HtmlElementInterface
      * @throws InvalidElementException If the current instance doesn't implement ElementInterface
      */
     private function getInstance(
-        $name, $text,
+        $name,
+        $text,
+        array $attributes,
         array $extras,
         array $parameters,
         bool $mainCall = false
@@ -199,11 +200,11 @@ class HtmlElement implements HtmlElementInterface
         $class = $element['class'];
         $type = $element['type'];
         $text = $text !== null ? $text : $element['text'];
-        $attributes = $element['attr'];
+        $attributes = $this->extendAttributes($attributes, $element['attr']);
 
         $children = array();
         foreach ((array) $element['children'] as $child) {
-            $children[] = $this->getInstance($child, null, array(), $parameters);
+            $children[] = $this->getInstance($child, null, array(), array(), $parameters);
         }
 
         $instance = new $class($type, $text, $attributes, $extras, $children);
@@ -217,7 +218,7 @@ class HtmlElement implements HtmlElementInterface
         }
 
         if (null !== $element['parent']) {
-            $parent = $this->getInstance($element['parent'], null, array(), $parameters);
+            $parent = $this->getInstance($element['parent'], null, array(), array(), $parameters);
 
             $parent->addChild($instance->getRoot());
         }
